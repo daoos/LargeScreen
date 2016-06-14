@@ -1,0 +1,40 @@
+.total{
+	position: absolute;
+    left: 25px;
+    bottom: 30px;
+    color: #01dbff;
+    font-size: 20px;
+    & dl{margin-bottom:8px;}
+	& .lab{
+		font-size:12px;font-weight:200;color:#fff;
+	}
+	& .lab::before{
+		content: "*";
+		color:#01dbff;
+		margin-right:10px; 
+		vertical-align: middle;
+	}
+	& .val{
+		/*color:#01dbff; 
+		font-weight:bold;
+		text-indent: 15px;*/
+		display:inline-block;
+		height:30px;
+		margin-right:50px;
+
+		& b{
+			background:url(../../src/images/numbers.png) no-repeat 0 -398px;
+			display:inline-block;
+			float:left;
+			height:30px;
+			width:10px;
+		}
+		& i{background:url(../../src/images/numbers.png) no-repeat;
+			display:inline-block;
+			float:left;
+			height:30px;
+			width:18px;
+		}
+
+	}
+}

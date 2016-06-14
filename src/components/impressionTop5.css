@@ -1,0 +1,10 @@
+.impressionTop5{
+	position: absolute;
+	bottom:50px;
+	right: 0px;
+	color:#01dbff;
+	font-size: 20px;
+	& h2{font-size:12px;color:#fff;}
+	& ul,li{list-style: none;}
+	& li{float:left;margin:5px;}
+}

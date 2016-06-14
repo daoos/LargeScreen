@@ -1,0 +1,20 @@
+.timeArea{
+	position: absolute;
+	left: 40px;
+	top: 50px;
+	color:#01dbff;
+	font-size: 20px;
+	font-weight: bold;
+	& h1{color:#fff;margin:0;padding:0;font-size:20px;}
+	& p{
+		font-weight: bold;
+		position: relative;
+		margin: 0;padding:0; 
+		padding:8px 0px;
+		margin:16px 0;
+		border-top:#01dbff solid 1px;
+		border-bottom:#01dbff solid 1px;
+		display:inline-block;
+	}
+	& .year{text-align:justify;font-weight: bold;}
+}
