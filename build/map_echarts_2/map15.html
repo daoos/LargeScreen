@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="background:#091D36 url(http://sandbox.runjs.cn/uploads/rs/25/19ibxggb/cfr38yfh.svg) no-repeat; ">
+    <div id="main" style="height:400px;background: transparent!important;"></div>
+    <div id="main-popup" style="height:400px"></div>
+</body>
+<script src="./echarts-2.2.7/build/dist/echarts-all.js"></script>
+<script src="./jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="./geojson/geojson.js"></script>
+<script type="text/javascript" src="./lonlat.js"></script>
+<script src="./ee.js"></script>
+<script src="./nn.js"></script>
+
+<script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        // 用于弹出窗口显示国家形状
+        var myChartForPopup = echarts.init(document.getElementById('main-popup'));
+
+        myChart.setOption(option, true);
+
+        
+
+        //标签式引入环境中，常用模块的引用可通过命名空间直取，同模块化下的路径结构，如：
+        //echarts.config = require('echarts/config')， zrender.tool.color = require('zrender/tool/color')
+        myChart.on(echarts.config.EVENT.MAP_SELECTED, function (param){
+            for (var p in param.selected) {
+                if (param.selected[p]) {
+                    if(!name_to_code[p]) return false;
+                    var geo = name_to_code[p];
+
+                    // 注册新的地图
+                    echarts.util.mapData.params.params[geo] = {
+                        getGeoJson: function (callback) {
+                            $.getJSON('./geojson/countries/'+geo+'.geo.json', callback);
+                        }
+                    };
+
+                    _option.series[0].mapType = geo;
+                    myChartForPopup.setOption(_option, true);
+                }
+            }
+        });
+</script>
+</html>

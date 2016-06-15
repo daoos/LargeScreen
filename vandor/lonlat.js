@@ -215,16 +215,18 @@ var __tw = {
             }
             arr.push(res);
         }
-        console.log(arr);
+        //console.log(arr);
         return arr;
     }
 
     Lonlat.prototype.getGeoJson = function(country) {
         var _this = this,
-            _resCountry;
+            _resCountry,
+            _properties;
         $.each(_geojson.features, function(index, value) {
             if (value.id == country) {
                 _resCountry = value.geometry;
+                _properties = value.properties
                 return false;
             }
         });
@@ -232,34 +234,44 @@ var __tw = {
             return false;
         }
         if (_resCountry.type == 'MultiPolygon') {
-            return _this.multiPolygon(_resCountry.coordinates);
+            return _this.multiPolygon(_resCountry.coordinates, _properties);
         } else if (_resCountry.type == 'Polygon') {
-            return _this.polygon(_resCountry.coordinates);
+            return _this.polygon(_resCountry.coordinates, _properties);
         }
     }
 
-    Lonlat.prototype.multiPolygon = function(source, nums) {
-        var _tmp, _index, _r, use;
-        for (var i = source.length - 1; i >= 0; i--) {
-            if (!_tmp) {
-                _tmp = source[i][0].length;
-                _index = i;
-            } else if (source[i][0].length > _tmp) {
-                _tmp = source[i][0].length;
-                _index = i;
-            }
-        }
-        _r = this.mt_rand(0, 1000);
+    Lonlat.prototype.multiPolygon = function(source, properties) {
+        var _weight = 0,
+            _index;
 
-        if (_r > 900) {
-            _index = this.mt_rand(0, source.length - 1);
-        }
+        _index = this.weight(properties.weight);
 
         use = source[_index][0];
         return this.lonLat(use);
     }
 
-    Lonlat.prototype.polygon = function(source, nums) {
+    Lonlat.prototype.weight = function(arr) {
+        var _wTotal = this.array_sum(arr),
+            _tmpW = 0,
+            _rollnum = 0,
+            _min,
+            _max,
+            _roll = this.mt_rand(1, _wTotal);
+
+        $.each(arr, function(index, value) {
+            _min = _tmpW;
+            _tmpW += value;
+            _max = _tmpW;
+            if (_roll > _min && _roll <= _max) {
+                __rollnum = index;
+                return false;
+            }
+        });
+
+        return __rollnum;
+    }
+
+    Lonlat.prototype.polygon = function(source, properties) {
         var use = source[0];
         return this.lonLat(use);
     }
@@ -298,7 +310,7 @@ var __tw = {
             y: lon
         };
         var _check = this.pointInPoly(_point, _poly);
-        console.log(_check);
+        //console.log(_check);
         return _check;
     }
 
@@ -529,6 +541,24 @@ var __tw = {
         }
 
         return retVal
+    }
+
+    Lonlat.prototype.array_sum = function(array) {
+        var key
+        var sum = 0
+
+        // input sanitation
+        if (typeof array !== 'object') {
+            return null
+        }
+
+        for (key in array) {
+            if (!isNaN(parseFloat(array[key]))) {
+                sum += parseFloat(array[key])
+            }
+        }
+
+        return sum
     }
 
     w.Lonlat = Lonlat;

@@ -156,6 +156,7 @@ button{
     -webkit-animation-duration: 2700ms;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-direction: alternate;
+    animation-iteration-count:3;
  
   }
 
