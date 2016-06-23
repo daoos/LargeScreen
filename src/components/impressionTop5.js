@@ -1,175 +1,215 @@
 import echarts from 'echarts';
 import temp from './impressionTop5.html';
 import './impressionTop5.css';
-import {setNumberSeparator} from '../modules/common.js';
+import {setNumberSeparator, impressCardinalNumber,delcommafy,commafy} from '../modules/common.js';
+import {__tw, name_to_code} from '../modules/geocfg.js';
 
-$('.wrapper').append(temp);
-
-
-
-
-let dom = document.getElementById("impressionDiv");
-let myChart = echarts.init(dom);
-
-//moco  
-function getGeoNameTop5(){
-	return ['INDIA','VIETNAM','THAILAND','USA','CHINA'];
-}
-
-function getGeoImpressCountTop5(str){
-	if(str === 'start'){
-		return [2579037,906404,519115,371880,349228]
-	}else if (str === 'end') {
-		return [(2579037+2665436),(906404+1012336),(519115+529565),(371880+409519),(349228+320195)]
-	}
-	console.log([[2579037,2665436],[906404,1012336],[519115,529565],[371880,409519],[349228,320195]]);
-}
-
-
-var app = {};
-var option = {
-    
-    tooltip: { 
-    	trigger: 'axis', 
-    	// formatter: "{b}，{c}",
-        formatter: function (params) {
-             console.log(params)
-             return '<div class="impressionTop5Pop-Up-Box">'+params[0].name+':  '+setNumberSeparator(params[0].value)+'</div>';
-         },
-    	extraCssText:'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
-    	// padding:10,
-        left:10,
-    	axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-        },
-    },
-    color:['rgba(1, 219, 255, 0.7)','rgba(1, 219, 255, 1)'],   
-    grid:{
-        show:false,
-        top:20,
-        containLabel:true,
-    },
-    xAxis:{
-            type: 'category',
-            // position:'top',
-            // gridIndex:100,
-            // name:'2222222',
-            axisLine:{
-            	lineStyle:{
-            		color:'#01dbff',
-            		width:2,
-            	}
-            },
-            nameLocation:'end',
-            axisTick:{show:false},
-            axisLabel:{
-                // show:false,
-            	interval:'0',
-            	textStyle:{
-            		color:'#01dbff',
-            	},
-                formatter: function (params) {
-                     return params;
-                }
-            },
-            splitLine: {
-            	show:false,
-            	lineStyle:{
-            		type:'dashed',
-            		color:'rgba(255, 255, 255, 0.01)',
-            	}
-            },
-            splitArea:{
-                show:true,
-                areaStyle:{
-                    opacity:.05,
-                }
-            },
-
-            boundaryGap: true,
-            data: getGeoNameTop5(),
-    },
-    yAxis: {
-            type: 'value',
-            nameLocation:'end',
-            position:'left',
-            axisLine:{
-            	lineStyle:{
-            		color:'#01dbff',
-            		width:2,
-            	}
-            },
-            minInterval:1,
-            axisTick:{show:false},
-            axisLabel:{
-            	show:false
-            },
-            splitLine: {
-            	show:false,
-            },
-
-            splitArea:{
-                show:true,
-                areaStyle:{
-                    opacity:.05,
-                }
-            },
-
-            scale: false,
-            
-    },
-
-    series: [
-        {           
-            type:'bar',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'top',
-                    formatter: function (params) {
-                         // console.log(params)
-                         return setNumberSeparator(params.value);
+export default class ImpressionTop5{
+    init(){$('.chartArea').append(temp)}
+    render(_DATA){   
+        let geoTopFiveData = _DATA.geoTopFive;
+        let starttime = localStorage.START_TIME;
+        let px2rem = lib.flexible.rem; // 当前页面的rem基准值
+        // let impressCardinalNumber = 34;
+   
+        let dom = document.getElementById("impressionDiv");
+        let myChart = echarts.init(dom);
+         
+        let getGeoTop5 = function(str){ 
+            let ss = impressCardinalNumber;
+            var strlist=[]; 
+            for (var i = 0; i < geoTopFiveData.length; i++) {
+                if(str==='country') {
+                    let p = (geoTopFiveData[i].country).toUpperCase();
+                    let c3 = __tw[p] || false;
+                    // console.log(c3,p,3,geoTopFiveData[i].country)
+                    function _flipObject(o){
+                        var newO ={};
+                        for(var s in o){newO[o[s]]= s}
+                        return newO;
                     }
+                    var __name_to_code = _flipObject(name_to_code);
+                    strlist.push(__name_to_code[c3]);
                 }
+                if(str==='start') strlist.push(geoTopFiveData[i].start*ss);
+                if(str ==='increase') strlist.push(geoTopFiveData[i].increase*ss);
+                if(str==='total') strlist.push(geoTopFiveData[i].start + geoTopFiveData.increase*ss)
+            }
+            return strlist;
+        };  
+
+        let geoTopFiveStart =  getGeoTop5('start');
+        let geoTopFiveIncrease = getGeoTop5('increase');
+        let geoTopFiveCountry = getGeoTop5('country'); 
+
+        
+        
+        var getOption = function(currnt){ return {
+            
+            tooltip: { 
+                trigger: 'axis', 
+                // formatter: "{b}，{c}",
+                formatter: function (params) {
+                     // console.log(params[0].value)
+                     return '<div class="impressionTop5Pop-Up-Box">'+params[0].name+':  '+commafy(params[0].value)+'</div>';
+                 },
+                extraCssText:'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+                // padding:10,
+                left:.1*px2rem,
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                textStyle:{
+                    fontSize:0.14*px2rem,
+                 }
             },
-            data:getGeoImpressCountTop5('start'),
+            color:['rgba(1, 219, 255, 0.7)','rgba(1, 219, 255, 1)'],   
+            grid:{ top:.16*px2rem,left:0.16*px2rem},//
+            xAxis:{
+                    type: 'category',
+                    // position:'top',
+                    // gridIndex:100,
+                    // name:'2222222',
+                    axisLine:{
+                        lineStyle:{
+                            color:'#01dbff',
+                            width:.02*px2rem,
+                        }
+                    },
+                    nameLocation:'end',
+                    axisTick:{show:false},
+                    axisLabel:{
+                        // show:false,
+                        interval:'0',
+                        textStyle:{
+                            color:'#01dbff',
+                            fontSize:0.12*px2rem,
+                        },
+                        margin:.25*px2rem,
+                        formatter: function (params) {
+                             return params;
+                        }
+                    },
+                    splitLine: {
+                        show:false,
+                        lineStyle:{
+                            type:'dashed',
+                            color:'rgba(255, 255, 255, 0.01)',
+                        }
+                    },
+                    splitArea:{
+                        show:true,
+                        areaStyle:{
+                            opacity:.05,
+                        }
+                    },
+
+                    boundaryGap: true,
+                    data: geoTopFiveCountry,
+            },
+            yAxis: {
+                    type: 'value',
+                    nameLocation:'end',
+                    position:'left',
+                    axisLine:{
+                        lineStyle:{
+                            color:'#01dbff',
+                            width:.02*px2rem,
+                        }
+                    },
+                    minInterval:1,
+                    axisTick:{show:false},
+                    axisLabel:{
+                        show:false
+                    },
+                    splitLine: {
+                        show:false,
+                    },
+
+                    splitArea:{
+                        show:true,
+                        areaStyle:{
+                            opacity:.05,
+                        }
+                    },
+
+                    scale: false,
+                    
+            },
+
+            series: [
+                {           
+                    type:'bar',
+                    containLabel:true,
+                    top:0,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top',
+                            formatter: function (params) {
+                                 // console.log(params)
+                                 return setNumberSeparator(params.value);
+                            },
+                            textStyle:{
+                                fontSize:0.10*px2rem,
+                            }
+                        }
+                    },
+                    data:currnt,
+                }
+            ]
+        }};
+
+        var app = {};
+
+
+        clearInterval(app.timeTicket);
+
+        function getCurrentData(){
+            var start = geoTopFiveStart;
+            var increase = geoTopFiveIncrease;
+            var s = (new Date().getTime() - starttime)/1000;
+            var data = [],_s=[];
+            for (var i = 0; i < start.length; i++) {
+                data.push((Math.floor((increase[i]/1800) * s + start[i])));
+                _s.push(increase[i]/1800);
+
+            }
+            // console.log('IMPRESSIONTOP5----')
+            // console.log('start: '+ start)
+            // console.log('increase: '+increase)
+            // console.log('country: '+geoTopFiveCountry)    
+            // console.log('currnt:  '+data)
+            // console.log('s:  '+s)
+            // console.log('_S:  '+_s)
+
+            return data;      
+        };
+
+
+        function render(){ 
+            var option = getOption(getCurrentData());
+            myChart.setOption(option,true);            
+        };
+
+
+        render();
+        
+        app.timeTicket = setInterval(function(){render()}, 1000);
+       
+        
+        
+        function renderImages(){
+            var str='';
+            for (var i = 0 ; i < geoTopFiveCountry.length; i++) {
+                str += '<li  style="background:url(./src/images/png/'+geoTopFiveCountry[i]+'.png) no-repeat ;background-size:cover;"></li>';
+            }
+            $('.impressionImgArea').html(str);
         }
-    ]
-};
-clearInterval(app.timeTicket);
 
-function getAddCountBySecond(){
-    var data1 = getGeoImpressCountTop5('end');
-    console.log(data1);
-    var _data1 = [];
-    data1.map(function(s){
-        _data1.push(Math.floor(s/1800));
-    });
-    console.log(_data1)
-    return _data1;
+        renderImages();
+    }
+    
 }
-
-var _data1 = getAddCountBySecond();
-
-app.timeTicket = setInterval(function (){
-    var data0 = option.series[0].data;
-    data0[0] = data0[0] + _data1[0]*3;
-    data0[1] = data0[1] + _data1[1]*3;
-    data0[2] = data0[2] + _data1[2]*3;
-    data0[3] = data0[3] + _data1[3]*3;
-    data0[4] = data0[4] + _data1[4]*3;
-
-    myChart.setOption(option);
-}, 1000);
-
-if (option && typeof option === "object") {
-    var startTime = +new Date();
-    myChart.setOption(option, true);
-    var endTime = +new Date();
-    var updateTime = endTime - startTime;
-    console.log("Time used:", updateTime);
-}
-
-
 
 

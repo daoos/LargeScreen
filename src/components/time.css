@@ -1,20 +1,38 @@
-.timeArea{
+
+@font-face
+{
+font-family: "myFirstFont";
+src: url('../fonts/HELVETICA BOLD.ttf');
+font-weight: bold;
+}
+
+.dateArea{
 	position: absolute;
 	left: 40px;
-	top: 50px;
+	top: 40px;
 	color:#01dbff;
 	font-size: 20px;
 	font-weight: bold;
-	& h1{color:#fff;margin:0;padding:0;font-size:20px;}
+	font-family:"myFirstFont";
+	& h1{color:#fff;margin:0;padding:0;font-size:20px;font-family:"myFirstFont";}
+	& #clock1{
+ 	fontSize:20px; 
+    fontFamily:"Century gothic"; 
+    fontColor: #01dbff;
+    font-weight:bold;
+    background:transparent;
+	}
 	& p{
 		font-weight: bold;
 		position: relative;
 		margin: 0;padding:0; 
 		padding:8px 0px;
-		margin:16px 0;
+		margin:16px 0 8px 0;
 		border-top:#01dbff solid 1px;
 		border-bottom:#01dbff solid 1px;
 		display:inline-block;
+		font-family:"myFirstFont";
 	}
-	& .year{text-align:justify;font-weight: bold;}
+	& .mouth{font-family:"myFirstFont";}
+	& .year{text-align:justify;font-weight: bold;font-family:"myFirstFont";}
 }

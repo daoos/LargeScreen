@@ -1,35 +1,41 @@
 .total{
 	position: absolute;
-    left: 25px;
-    bottom: 30px;
+    left:26px;
+    bottom:40px;
     color: #01dbff;
     font-size: 20px;
-    & dl{margin-bottom:8px;}
+    & dl{margin-top:16px;}
 	& .lab{
-		font-size:12px;font-weight:200;color:#fff;
+		font-size:12px;font-weight:200;color:#fff;padding: 0px 0 8px 0;
+
 	}
 	& .lab::before{
-		content: "*";
-		color:#01dbff;
-		margin-right:10px; 
-		vertical-align: middle;
+		content: "";
+	    color: #01dbff;
+	    margin-right: 8px;
+	    vertical-align: top;
+	    width: 0;
+	    height: 0;
+	    border-left: 6px solid transparent;
+	    border-right: 6px solid transparent;
+	    border-top: 7px solid #01dbff;	    
+	    display: inline-block;
 	}
 	& .val{
-		/*color:#01dbff; 
-		font-weight:bold;
-		text-indent: 15px;*/
 		display:inline-block;
 		height:30px;
-		margin-right:50px;
+		margin-left:16px;
 
 		& b{
-			background:url(../../src/images/numbers.png) no-repeat 0 -398px;
+			background:url(../images/numbers2.png) no-repeat 0 -398px;
+			/*background-size:cover; */
 			display:inline-block;
 			float:left;
 			height:30px;
 			width:10px;
 		}
-		& i{background:url(../../src/images/numbers.png) no-repeat;
+		& i{background:url(../images/numbers2.png) no-repeat;
+			/*background-size:cover; */
 			display:inline-block;
 			float:left;
 			height:30px;
@@ -37,4 +43,11 @@
 		}
 
 	}
+}
+.chartArea{
+	position: absolute;
+	top:40px;
+	bottom: 40px;
+	right: 40px;
+	width: 300px;
 }

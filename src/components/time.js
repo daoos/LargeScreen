@@ -4,8 +4,13 @@ import temp from './time.html';
 import './time.css';
 
 $('.wrapper').append(temp);
-$("#clock1").MyDigitClock({
-    fontSize:20, 
+
+
+let px2rem = lib.flexible.rem;
+
+// console.log(px2rem)
+$("#clockid").MyDigitClock({
+    fontSize:px2rem*0.2, 
     // fontFamily:"Century gothic", 
     fontColor: "#01dbff", 
     fontWeight:"bold", 

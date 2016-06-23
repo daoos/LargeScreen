@@ -1,19 +1,17 @@
  *{margin:0;padding:0}
 
  .wrapper{
-  height:500px;
+  height:466.125px;
   position: relative;
   left: 0;top: 0;right: 0;bottom: 0;
-  background: #091d36;
+  background: #000115;
 }
 .worldMap{
-  height:410px;
-  width:750px;
-  background:#091D36 url(http://sandbox.runjs.cn/uploads/rs/25/19ibxggb/cfr38yfh.svg) no-repeat; 
-  /*background-size:cover; */
-  position:relative;
+  height:380px;
+  width:735px;
+    position:relative;
   position: absolute;
-  top:50px;
+  top:40px;
   left: 150px;
 }
 .header{
