@@ -1,10 +1,21 @@
-
-@font-face
-{
+html{font-family:"myFirstFont";overflow: hidden;}
+@font-face{
 font-family: "myFirstFont";
-src: url('../fonts/HELVETICA BOLD.ttf');
-font-weight: bold;
+src: url('../fonts/HELVETICA.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/HELVETICA.woff') format('woff'),       
+       url('../fonts/HELVETICA.ttf')  format('truetype'),
+       url('../fonts/HELVETICA.svg#svgFontName') format('svg'); 
 }
+
+
+@font-face{
+font-family: "myFirstFontBold";
+src: url('../fonts/HELVETICABOLD.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/HELVETICABOLD.woff') format('woff'),       
+       url('../fonts/HELVETICABOLD.ttf')  format('truetype'),
+       url('../fonts/HELVETICABOLD.svg#svgFontName') format('svg'); 
+}
+
 
 .dateArea{
 	position: absolute;
@@ -13,15 +24,9 @@ font-weight: bold;
 	color:#01dbff;
 	font-size: 20px;
 	font-weight: bold;
-	font-family:"myFirstFont";
-	& h1{color:#fff;margin:0;padding:0;font-size:20px;font-family:"myFirstFont";}
-	& #clock1{
- 	fontSize:20px; 
-    fontFamily:"Century gothic"; 
-    fontColor: #01dbff;
-    font-weight:bold;
-    background:transparent;
-	}
+	font-family:"myFirstFontBold";
+	& h1{color:#fff;margin:0;padding:0;font-size:20px;text-indent: 9999px;background: url('../images/logo.svg') no-repeat;}
+	
 	& p{
 		font-weight: bold;
 		position: relative;
@@ -31,8 +36,10 @@ font-weight: bold;
 		border-top:#01dbff solid 1px;
 		border-bottom:#01dbff solid 1px;
 		display:inline-block;
-		font-family:"myFirstFont";
+		font-weight: 800;
+		font-family:"myFirstFontBold";
 	}
-	& .mouth{font-family:"myFirstFont";}
-	& .year{text-align:justify;font-weight: bold;font-family:"myFirstFont";}
+	& .mouth{font-weight: 800;font-family:"myFirstFontBold";}
+	& .year{text-align:justify;font-weight: 800;font-family:"myFirstFontBold";
+}
 }

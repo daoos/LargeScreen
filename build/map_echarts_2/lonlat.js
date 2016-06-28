@@ -199,7 +199,7 @@ var __tw = {
     var _inc = 1000000;
 
     function Lonlat() {
-        console.log('init');
+        // console.log('init');
         _geojson = w.geojson;
     }
 

@@ -24,6 +24,8 @@ export default class AdvertiserTop5{
             tooltip: { 
                 textStyle:{
                     fontSize:0.14*px2rem,
+                    fontFamily:'myFirstFont',
+
                 }
                 // alwaysShowContent: true,
                 // formatter: function (params) {
@@ -39,7 +41,7 @@ export default class AdvertiserTop5{
                 {
                     type:'pie',
                     // center: ['100%', '10%'],
-                    radius: ['85%','100%'],
+                    radius: ['100%','85%'],
                     legendHoverLink:false,
                     hoverAnimation:false,
                     clockwise:false,
@@ -49,6 +51,7 @@ export default class AdvertiserTop5{
                         normal:{
                             textStyle:{
                                 fontSize:0.10*px2rem,
+                                fontFamily:'myFirstFont',
                                 }
 
                         }
@@ -72,6 +75,10 @@ export default class AdvertiserTop5{
                                     show: true,
                                     position: 'center',
                                 },
+                                textStyle:{
+                                    fontSize:0.01*px2rem,
+                                    fontFamily:'myFirstFont',
+                                }
                             },
                             itemStyle: {
                                 shadowColor: 'red',
@@ -102,6 +109,8 @@ export default class AdvertiserTop5{
             // console.log(7,current)
         }
 
+        clearInterval(timer.apptopTimeTicket);
+
         function getCurrentData(start,increase){
             if (increase){
                 var s = (new Date().getTime() - starttime)/1000;
@@ -131,7 +140,7 @@ export default class AdvertiserTop5{
         }
         
         render();
-        setInterval(function(){render()}, 1000);
+        timer.apptopTimeTicket=setInterval(function(){render()}, 1000);
 
     }
 }

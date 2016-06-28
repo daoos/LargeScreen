@@ -11,7 +11,7 @@ let px2rem = lib.flexible.rem;
 // console.log(px2rem)
 $("#clockid").MyDigitClock({
     fontSize:px2rem*0.2, 
-    // fontFamily:"Century gothic", 
+    fontFamily:"myFirstFontBold", 
     fontColor: "#01dbff", 
     fontWeight:"bold", 
     // bAmPm:true,

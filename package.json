@@ -59,7 +59,8 @@
   },
   "scripts": {
     "pro": "NODE_ENV=production webpack",
-    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
+    "watch": "WEBPACK_ENV=dev webpack --progress --colors --watch",
+    "start": "webpack-dev-server --inline --hot",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   }
 }

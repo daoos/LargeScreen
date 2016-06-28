@@ -30,6 +30,11 @@ export default class ImpressionTop5{
                     }
                     var __name_to_code = _flipObject(name_to_code);
                     strlist.push(__name_to_code[c3]);
+                    
+                }
+                if (str==='c') {
+                    let c = (geoTopFiveData[i].country).toUpperCase();
+                    strlist.push(c);
                 }
                 if(str==='start') strlist.push(geoTopFiveData[i].start*ss);
                 if(str ==='increase') strlist.push(geoTopFiveData[i].increase*ss);
@@ -40,7 +45,9 @@ export default class ImpressionTop5{
 
         let geoTopFiveStart =  getGeoTop5('start');
         let geoTopFiveIncrease = getGeoTop5('increase');
-        let geoTopFiveCountry = getGeoTop5('country'); 
+        let geoTopFiveCountry = getGeoTop5('country');
+        let geoTopFiveC = getGeoTop5('c');
+
 
         
         
@@ -61,10 +68,11 @@ export default class ImpressionTop5{
                 },
                 textStyle:{
                     fontSize:0.14*px2rem,
+                    fontFamily:'myFirstFont',
                  }
             },
             color:['rgba(1, 219, 255, 0.7)','rgba(1, 219, 255, 1)'],   
-            grid:{ top:.16*px2rem,left:0.16*px2rem},//
+            grid:{ top:0.16*px2rem,left:0.16*px2rem},//
             xAxis:{
                     type: 'category',
                     // position:'top',
@@ -73,7 +81,7 @@ export default class ImpressionTop5{
                     axisLine:{
                         lineStyle:{
                             color:'#01dbff',
-                            width:.02*px2rem,
+                            width:.01*px2rem,
                         }
                     },
                     nameLocation:'end',
@@ -84,8 +92,9 @@ export default class ImpressionTop5{
                         textStyle:{
                             color:'#01dbff',
                             fontSize:0.12*px2rem,
+                            fontFamily:'myFirstFont',
                         },
-                        margin:.25*px2rem,
+                        // margin:0.08*px2rem,
                         formatter: function (params) {
                              return params;
                         }
@@ -105,7 +114,7 @@ export default class ImpressionTop5{
                     },
 
                     boundaryGap: true,
-                    data: geoTopFiveCountry,
+                    data: geoTopFiveC,
             },
             yAxis: {
                     type: 'value',
@@ -114,13 +123,13 @@ export default class ImpressionTop5{
                     axisLine:{
                         lineStyle:{
                             color:'#01dbff',
-                            width:.02*px2rem,
+                            width:.01*px2rem,
                         }
                     },
                     minInterval:1,
                     axisTick:{show:false},
                     axisLabel:{
-                        show:false
+                        show:false,
                     },
                     splitLine: {
                         show:false,
@@ -152,8 +161,16 @@ export default class ImpressionTop5{
                             },
                             textStyle:{
                                 fontSize:0.10*px2rem,
+                                fontFamily:'myFirstFont',
                             }
                         }
+                    },
+                    itemStyle:{
+                        normal:{
+                            barBorderRadius:[1, 1, 0, 0],
+                        },
+                        // barGap: '50%',
+                        barCategoryGap: '50%',
                     },
                     data:currnt,
                 }
@@ -163,7 +180,7 @@ export default class ImpressionTop5{
         var app = {};
 
 
-        clearInterval(app.timeTicket);
+        clearInterval(timer.impressTimeTicket);
 
         function getCurrentData(){
             var start = geoTopFiveStart;
@@ -182,6 +199,7 @@ export default class ImpressionTop5{
             // console.log('currnt:  '+data)
             // console.log('s:  '+s)
             // console.log('_S:  '+_s)
+            // console.log(s,increase,data)
 
             return data;      
         };
@@ -195,14 +213,17 @@ export default class ImpressionTop5{
 
         render();
         
-        app.timeTicket = setInterval(function(){render()}, 1000);
+        timer.impressTimeTicket = setInterval(function(){render()}, 1000);
        
         
         
         function renderImages(){
+            // var _p = p.replace(/ /g,'%20');
+
             var str='';
             for (var i = 0 ; i < geoTopFiveCountry.length; i++) {
-                str += '<li  style="background:url(./src/images/png/'+geoTopFiveCountry[i]+'.png) no-repeat ;background-size:cover;"></li>';
+                var _p = geoTopFiveCountry[i].replace(/ /g,'%20');
+                str += '<li  style="background:url(./src/images/png/'+_p+'.png) no-repeat ;background-size:cover;"></li>';
             }
             $('.impressionImgArea').html(str);
         }

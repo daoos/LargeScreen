@@ -59,9 +59,10 @@ if (production) {
             mangle: true,
             compress: {
                 warnings: false, // 禁止生成warning
+                drop_console: true
             },
-        }),
 
+        }),
         // 这个插件提供了各种可用在生产环境下的变量
         // 通过设置为false，可避免生产环境下调用到它们
         new webpack.DefinePlugin({
@@ -73,7 +74,7 @@ if (production) {
             },
         })
     ]);
-	outputFile = libraryName + 'min.js';
+	outputFile = libraryName + '_min.js';
 } else{
 	outputFile = libraryName + '.js';
 };
@@ -87,7 +88,7 @@ var config = {
 	
 	output:{
 		path: path.join(__dirname , '/build/'),
-		filename: production ? '[name]-[hash].js' : outputFile,
+		filename: outputFile,
 		chunkFilename: '[name]-[chunkhash].js',
 		// publicPath: '/',
 		publicPath:'../build/',

@@ -4,15 +4,16 @@
     bottom:40px;
     color: #01dbff;
     font-size: 20px;
-    & dl{margin-top:16px;}
+    & dl{margin-top:10px;}
 	& .lab{
-		font-size:12px;font-weight:200;color:#fff;padding: 0px 0 8px 0;
+		font-size:12px;color:#fff;padding: 0px 0 8px 0;
 
 	}
 	& .lab::before{
 		content: "";
 	    color: #01dbff;
 	    margin-right: 8px;
+	    margin-top: 4px;
 	    vertical-align: top;
 	    width: 0;
 	    height: 0;
@@ -23,23 +24,27 @@
 	}
 	& .val{
 		display:inline-block;
-		height:30px;
+		height:25px;
 		margin-left:16px;
 
 		& b{
-			background:url(../images/numbers2.png) no-repeat 0 -398px;
-			/*background-size:cover; */
+			background:url(../images/numbers.png) no-repeat 0 -298.5px;
+			/*background-size:100% 1000%; */
+			/*background-size: cover;*/
+			background-size: 15px 330px;
 			display:inline-block;
 			float:left;
-			height:30px;
+			height:25px;
 			width:10px;
 		}
-		& i{background:url(../images/numbers2.png) no-repeat;
-			/*background-size:cover; */
+		& i{background:url(../images/numbers.png) no-repeat;
+			/*background-size:100% 1000%; */
+			/*background-size: cover;*/
+			background-size: 15px 330px;
 			display:inline-block;
 			float:left;
-			height:30px;
-			width:18px;
+			height:25px;
+			width:15px;
 		}
 
 	}

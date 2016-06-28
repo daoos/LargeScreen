@@ -1,74 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="utf-8">
+    <script src="./echarts-2.2.7/build/dist/echarts-all.js"></script>
+    <script src="./jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="./geojson/geojson.js"></script>
+    <script type="text/javascript" src="./lonlat.js"></script>
+    <script src="./nn.js"></script>
+    
+    <style>
+        *{margin:0;padding: 0;}
+        html,body,#main{height: 100%;}
+        html{font-family:"myFirstFontBold";}
+        @font-face{
+        font-family: "myFirstFontBold";
+        src: url('../build/fonts/HELVETICABOLD.eot?#iefix') format('embedded-opentype'),
+               url('../build/fonts/HELVETICABOLD.woff') format('woff'),       
+               url('../build/fonts/HELVETICABOLD.ttf')  format('truetype'),
+               url('../build/fonts/HELVETICABOLD.svg#svgFontName') format('svg'); 
+        }
+
+        .clearfix:before,.clearfix:after{ 
+            content:""; 
+            display:table; 
+        } 
+        .clearfix:after{clear:both;} 
+        #main{
+            background:url(./images/timeline.svg) no-repeat; 
+            background-size:100% 100%; 
+            /*padding-top:60px; */
+        }
+
+        #main-popup .right label, #main-popup .right .top5{color:#fff;}
+
+        
+    </style>
+
 </head>
 
 <body style="position:relative;">
     <div id="main"></div>
     <div id="main-popup">
+        <div class="clearfix content">
         <div class="left"><div id="svg-area"></div></div>
         <div class="right">
             <h2><i></i></h2>
-            <div class="capital" style="margin-top:8px">
+            <p class="capital" style="margin-top:8px">
                 <label>CAPITAL:</label>
                 <span></span>
-            </div>
-            <div class="gdp">
+            </p>
+            <p class="gdp">
                 <label>GDP:</label>
                 <span></span>
-            </div>
-            <div class="population">
+            </p>
+            <p class="population">
                 <label>POPULATION:</label>
                 <span></span>
                 <em></em>
-            </div>
-            <div class="impression">
+            </p>
+            <p class="impression">
                 <label>IMPRESSION:</label>
                 <span></span>
-            </div>
-            <div class="click">
+            </p>
+            <p class="click">
                 <label>CLICK:</label>
                 <span></span>
-            </div>
-            <div class="top5">
+            </p>
+            <p class="top5">
                 <label>TOP 5 ADVERTISER:</label>
-                <div class="imgarea"></div>
-            </div>
+            </p>
+            <p class="imgarea"></p>
+        </div>
         </div>
     </div>
 </body>
-<script src="./echarts-2.2.7/build/dist/echarts-all.js"></script>
-<script src="./jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="./geojson/geojson.js"></script>
-<script type="text/javascript" src="./lonlat.js"></script>
-<script src="./nn.js"></script>
 
-<style>
-    html,body,#main{height: 100%}
-    #main{
-        background:url(./images/timeline.svg) no-repeat; 
-        background-size:100% 100%; 
-        /*padding-top:60px; */
-    }
-    #main-popup{
-        display: none;
-        width:532px;height: 350px;
-        position: absolute; 
-        top:50%;left: 50%;
-        margin-left: -266px;
-        margin-top:-175px;
-        background:url(./images/popupbg.svg) no-repeat;
-    }
-    #main-popup .left{float:left;padding:20px;line-height:300px}
-    #svg-area{width: 172px;height:172px; display: inline-block;vertical-align: middle;};
-    #main-popup .right { width: 320px; height:350px; float: left; color:#00dbff; font-family: 'Helvetica';}
-    #main-popup .right h2{font-weight: 800; margin: 0;padding:50px 0 8px 0;color:#FFF;}
-    #main-popup .right h2 em{width:30px;height:30px;display: inline-block;margin-right: 5px;vertical-align: bottom;background-size: cover;}
-    #main-popup .right div{color:#00dbff;padding:4px 0 }
-    #main-popup .right label, #main-popup .right .top5{color:#fff;}
-    
-</style>
+<script type="text/javascript">
+        let px2rem = localStorage.PX2REM; // 当前页面的rem基准值
+        $('html').attr('font-size',px2rem+'px');
+        $('#main-popup').css({
+            'display':'none',
+            'width':4.86*px2rem,
+            'height':3.2*px2rem,
+            'position':'absolute',
+            'top':'50%',
+            'left':'50%',
+            'margin-top':-(3.2*px2rem)/2,
+            'margin-left':-(4.86*px2rem)/2,
+            'background':'url(./images/popupbg.svg) no-repeat',
+        });
+
+        
+        $('#main-popup .content').css({
+            'padding':0.2*px2rem,
+        });
+
+        $('#main-popup .left').css({
+            'float':'left',
+            // width:'30%'
+            // 'line-height':2.8*px2rem,
+
+        })
+
+        $('#svg-area').css({
+            width: 1.72*px2rem,
+            height:2.8*px2rem,
+            display: 'inline-block',
+            verticalAlign: 'middle'
+        });
+
+
+        $('#main-popup .right').css({
+            width:2.4*px2rem,
+            float:'left',
+            color:'#00dbff',
+            // fontFamily:'Helvetica',
+            marginLeft:0.32*px2rem,
+        })
+
+        $('#main-popup .right h2').css({
+            fontSize:0.24*px2rem,
+            fontWeight:'800',
+            paddingTop: 0.1*px2rem,
+            paddingBottom: 0.08*px2rem,
+            color:'#fff',
+            borderBottomStyle:'solid',
+            borderBottomColor:'#00dbff',
+            borderBottomWidth:0.01*px2rem,        
+        });
+
+        // $('#main-popup .right em').css({
+        //     'width':0.3*px2rem,
+        //     'height':0.3*px2rem,
+        //     'display': 'inline-block',
+        //     'margin-right': 5*px2rem,
+        //     'vertical-align': 'bottom',
+        //     'background-size': 'cover',
+        // });
+
+
+        $('#main-popup .right p').css({
+            color:'#00dbff',
+            padding:0.04*px2rem,
+            fontSize:0.14*px2rem,
+        });
+
+</script>    
 
 <script type="text/javascript">
     var __lonlat = new Lonlat();
@@ -77,11 +154,63 @@
     var geoForMapData = JSON.parse(localStorage.LOCAL_DATA).common.geoForMap;
     var starttime = localStorage.START_TIME;
 
-    let px2rem = localStorage.PX2REM; // 当前页面的rem基准值
-
-    // Math.floor(Math.random() * (300-200+1) + 200))
+    
 
     let impressCardinalNumber = 34;
+
+    function commafy(num){
+
+   // if((num+"").Trim()==""){
+
+   //    return"";
+
+   // }
+
+   if(isNaN(num)){
+
+      return"";
+
+   }
+
+   num = num+"";
+
+   if(/^.*\..*$/.test(num)){
+
+      var pointIndex =num.lastIndexOf(".");
+
+      var intPart = num.substring(0,pointIndex);
+
+      var pointPart =num.substring(pointIndex+1,num.length);
+
+      intPart = intPart +"";
+
+       var re =/(-?\d+)(\d{3})/
+
+       while(re.test(intPart)){
+
+          intPart =intPart.replace(re,"$1,$2")
+
+       }
+
+      num = intPart+"."+pointPart;
+
+   }else{
+
+      num = num +"";
+
+       var re =/(-?\d+)(\d{3})/
+
+       while(re.test(num)){
+
+          num =num.replace(re,"$1,$2")
+
+       }
+
+   }
+// console.log(num)
+    return num;
+
+}
     
     function getCurrentData(start,increase){
         var second = (new Date().getTime() - starttime)/1000;
@@ -97,7 +226,7 @@
         for(let p in geoForMapData){
             let start = geoForMapData[p].start,
                 increase = geoForMapData[p].increase,
-                mun =4000;
+                mun =30000;
 
             let currntData = getCurrentData(start,increase);
 
@@ -313,20 +442,22 @@
     let timeTicket = setInterval(everyHalfRequestData,31000);
 
     function renderPopUpHtml(data,p){
+
         var _p = p.replace(/ /g,'%20');
         if (typeof data=='undefined') {return false}
-        $('#main-popup .right h2').empty().html('<em style="background:url(../src/images/png/'+_p+'.png) no-repeat; background-size:cover;"></em>'+ p)
-        $('.capital span').empty().html(data.capital)
+        $('#main-popup .right h2').empty().html('<em style="background:url(../src/images/png/'+_p+'.png) no-repeat; background-size:cover;'+
+            'width:'+0.3*px2rem+'px;height:'+0.3*px2rem+'px;display: inline-block;margin-right:'+ 0.05*px2rem+'px;vertical-align: bottom;"></em>'+ p);
+        $('.capital span').empty().html(data.capital);
         $('.gdp span').empty().html(data.gdp + ' '+'Billion USD');
-        $('.population span').empty().html(data.population);
-        $('.impression span').empty().html(Math.floor(data.click)*impressCardinalNumber);
-        $('.click span').empty().html(data.click);
+        $('.population span').empty().html(commafy(data.population));
+        $('.impression span').empty().html(commafy(Math.floor(data.click)*impressCardinalNumber));
+        $('.click span').empty().html(commafy(data.click));
         var str ='';
         var top5 = data.appTopFive;
         for (var i = top5.length - 1; i >= 0; i--) {
-            str+= '<img style="width:30px;height:30px;margin:3px;" src="'+top5[i].icon+'"/>';
+            str+= '<img style="width:'+0.3*px2rem+'px;height:'+.30*px2rem+'px;margin:'+.03*px2rem+'px;" src="'+top5[i].icon+'"/>';
         }
-        $('.top5 .imgarea').empty().html(str);
+        $('.imgarea').empty().html(str);
         // console.log(3,data,p)                        
    }
 
@@ -390,4 +521,6 @@
     })
         
 </script>
+
+
 </html>

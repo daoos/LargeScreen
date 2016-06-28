@@ -155,10 +155,25 @@ button {
     opacity: 1;
     box-shadow: 0 0.01rem 0.3rem rgba(59,255,255,1);
   }
-}@font-face {
+}html {
   font-family: "myFirstFont";
-  src: url(../build/fonts/HELVETICA BOLD.ttf);
-  font-weight: bold;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: "myFirstFont";
+  src: url(../build/fonts/HELVETICA.eot?#iefix) format('embedded-opentype'),
+       url(../build/fonts/HELVETICA.woff) format('woff'),       
+       url(../build/fonts/HELVETICA.ttf)  format('truetype'),
+       url(../build/img/HELVETICA.svg#svgFontName) format('svg');
+}
+
+@font-face {
+  font-family: "myFirstFontBold";
+  src: url(../build/fonts/HELVETICABOLD.eot?#iefix) format('embedded-opentype'),
+       url(../build/fonts/HELVETICABOLD.woff) format('woff'),       
+       url(../build/fonts/HELVETICABOLD.ttf)  format('truetype'),
+       url(../build/img/HELVETICABOLD.svg#svgFontName) format('svg');
 }
 
 .dateArea {
@@ -168,7 +183,7 @@ button {
   color: #01dbff;
   font-size: 0.2rem;
   font-weight: bold;
-  font-family: "myFirstFont";
+  font-family: "myFirstFontBold";
 }
 
 .dateArea h1 {
@@ -176,15 +191,8 @@ button {
   margin: 0;
   padding: 0;
   font-size: 0.2rem;
-  font-family: "myFirstFont";
-}
-
-.dateArea #clock1 {
-  fontSize: 0.2rem;
-  fontFamily: "Century gothic";
-  fontColor: #01dbff;
-  font-weight: bold;
-  background: transparent;
+  text-indent: 99.99rem;
+  background: url(../build/img/logo.svg) no-repeat;
 }
 
 .dateArea p {
@@ -197,17 +205,19 @@ button {
   border-top: #01dbff solid 0.01rem;
   border-bottom: #01dbff solid 0.01rem;
   display: inline-block;
-  font-family: "myFirstFont";
+  font-weight: 800;
+  font-family: "myFirstFontBold";
 }
 
 .dateArea .mouth {
-  font-family: "myFirstFont";
+  font-weight: 800;
+  font-family: "myFirstFontBold";
 }
 
 .dateArea .year {
   text-align: justify;
-  font-weight: bold;
-  font-family: "myFirstFont";
+  font-weight: 800;
+  font-family: "myFirstFontBold";
 }.total {
   position: absolute;
   left: 0.26rem;
@@ -217,12 +227,11 @@ button {
 }
 
 .total dl {
-  margin-top: 0.16rem;
+  margin-top: 0.1rem;
 }
 
 .total .lab {
   font-size: 0.12rem;
-  font-weight: 200;
   color: #fff;
   padding: 0 0 0.08rem 0;
 }
@@ -231,6 +240,7 @@ button {
   content: "";
   color: #01dbff;
   margin-right: 0.08rem;
+  margin-top: 0.04rem;
   vertical-align: top;
   width: 0;
   height: 0;
@@ -242,26 +252,30 @@ button {
 
 .total .val {
   display: inline-block;
-  height: 0.3rem;
+  height: 0.25rem;
   margin-left: 0.16rem;
 }
 
 .total .val b {
-  background: url(../build/img/numbers2.png) no-repeat 0 -3.98rem;
-  /*background-size:cover; */
+  background: url(../build/img/numbers.png) no-repeat 0 -2.985rem;
+  /*background-size:100% 1000%; */
+  /*background-size: cover;*/
+  background-size: 0.15rem 3.3rem;
   display: inline-block;
   float: left;
-  height: 0.3rem;
+  height: 0.25rem;
   width: 0.1rem;
 }
 
 .total .val i {
-  background: url(../build/img/numbers2.png) no-repeat;
-  /*background-size:cover; */
+  background: url(../build/img/numbers.png) no-repeat;
+  /*background-size:100% 1000%; */
+  /*background-size: cover;*/
+  background-size: 0.15rem 3.3rem;
   display: inline-block;
   float: left;
-  height: 0.3rem;
-  width: 0.18rem;
+  height: 0.25rem;
+  width: 0.15rem;
 }
 
 .chartArea {
@@ -286,13 +300,15 @@ button {
 .advertiserTop5 h2 {
   font-size: 0.12rem;
   color: #fff;
-  margin-bottom: 0.16rem;
+  margin-bottom: 0.12rem;
+  font-weight: 200;
 }
 
 .advertiserTop5 h2::before {
   content: "";
   color: #01dbff;
   margin-right: 0.08rem;
+  margin-top: 0.04rem;
   vertical-align: top;
   width: 0;
   height: 0;
@@ -304,12 +320,13 @@ button {
 
 .advertiserTop5 ul {
   margin-left: 0.08rem;
-  height: 0.6rem;
+  height: 0.7rem;
   width: 100%;
 }
 
 .advertiserTop5 li {
   float: left;
+  /*margin:0 -4px;*/
   height: 100%;
 }
 
@@ -317,7 +334,7 @@ button {
   width: 100%;
   height: 30%;
   text-align: center;
-  padding-top: 0.08rem;
+  padding-top: 0.05rem;
 }
 
 .advertiserTop5 li .itemMain {
@@ -335,17 +352,18 @@ button {
   clear: both;
 }.impressionTop5 {
   position: absolute;
-  bottom: 0;
+  bottom: 0.2rem;
   color: #01dbff;
   font-size: 0.2rem;
   width: 3rem;
-  height: 2.5rem;
+  height: 2.4rem;
 }
 
 .impressionTop5 h2 {
   font-size: 0.12rem;
   color: #fff;
   margin-bottom: 0.08rem;
+  font-weight: 400;
 }
 
 .impressionTop5 h2::before {
@@ -353,6 +371,7 @@ button {
   color: #01dbff;
   margin-right: 0.08rem;
   vertical-align: top;
+  margin-top: 0.04rem;
   width: 0;
   height: 0;
   border-left: 0.06rem solid transparent;
@@ -361,16 +380,16 @@ button {
   display: inline-block;
 }
 
-.impressionTop5 .impressionImgArea {
+.impressionImgArea {
   position: absolute;
-  bottom: 0.16rem;
+  bottom: 0;
   left: 0.15rem;
 }
 
-.impressionTop5 .impressionImgArea li {
+.impressionImgArea li {
   list-style: none;
   float: left;
   width: 0.2rem;
   height: 0.2rem;
-  margin: 0 0.16rem;
+  margin: 0 0.155rem;
 }
