@@ -25,21 +25,50 @@ src: url('../fonts/HELVETICABOLD.eot?#iefix') format('embedded-opentype'),
 	font-size: 20px;
 	font-weight: bold;
 	font-family:"myFirstFontBold";
-	& h1{color:#fff;margin:0;padding:0;font-size:20px;text-indent: 9999px;background: url('../images/logo.svg') no-repeat;}
+	& .logo{
+		width:140px;
+		height: 30px;
+		margin:0;padding:0;
+		margin-top: -5px;
+		background: url('../images/logo.svg') no-repeat;
+	}
 	
 	& p{
 		font-weight: bold;
 		position: relative;
 		margin: 0;padding:0; 
-		padding:8px 0px;
-		margin:16px 0 8px 0;
+		padding:0px 0px 2px 0;
+		margin:16px 0 0px 0;
 		border-top:#01dbff solid 1px;
 		border-bottom:#01dbff solid 1px;
 		display:inline-block;
 		font-weight: 800;
 		font-family:"myFirstFontBold";
 	}
-	& .mouth{font-weight: 800;font-family:"myFirstFontBold";}
-	& .year{text-align:justify;font-weight: 800;font-family:"myFirstFontBold";
+	& .day{
+		overflow: hidden;
+		text-align: center;
+		width: 88px;
+		& .num{
+			font-size: .25rem;
+			display: block;
+		    text-align:justify;
+            text-justify:distribute-all-lines;/*ie6-8*/
+            text-align-last:justify;/* ie9*/
+        }
+        & .year{margin-top: -.4rem;}
+            
+	}
+		
 }
+
+@media screen and (-webkit-min-device-pixel-ratio:0){/* chrome*/
+    .num:after{
+        content:".";
+        display: inline-block;
+        width:100%;
+        overflow:hidden;
+        height:0;
+    }
 }
+

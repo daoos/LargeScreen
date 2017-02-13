@@ -4,9 +4,9 @@
     bottom:40px;
     color: #01dbff;
     font-size: 20px;
-    & dl{margin-top:10px;}
+    & dl{margin-top:8px;}
 	& .lab{
-		font-size:12px;color:#fff;padding: 0px 0 8px 0;
+		font-size:12px;color:#fff;padding: 0px 0 4px 0;
 
 	}
 	& .lab::before{
@@ -28,16 +28,16 @@
 		margin-left:16px;
 
 		& b{
-			background:url(../images/numbers.png) no-repeat 0 -298.5px;
+			background:url(../images/numbers_2.png) no-repeat 0 -298.5px;
 			/*background-size:100% 1000%; */
 			/*background-size: cover;*/
 			background-size: 15px 330px;
 			display:inline-block;
 			float:left;
 			height:25px;
-			width:10px;
+			width:9px;
 		}
-		& i{background:url(../images/numbers.png) no-repeat;
+		& i{background:url(../images/numbers_2.png) no-repeat;
 			/*background-size:100% 1000%; */
 			/*background-size: cover;*/
 			background-size: 15px 330px;

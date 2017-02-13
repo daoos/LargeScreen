@@ -1,22 +1,24 @@
 {
-  "name": "touping",
+  "name": "touping2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amcharts": "^3.14.5",
-    "ammaps": "^3.14.5",
-    "angular": "^1.5.6",
-    "autoprefixer": "^6.3.6",
-    "echarts": "^3.1.10",
+    "echarts": "^2.2.7-beta7",
+    "es6-promise": "^4.0.5",
+    "fetch-jsonp": "^1.0.2",
+    "geojson": "^0.4.0",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.4",
-    "mustache": "^2.2.1",
-    "normalize.css": "^4.1.1",
-    "precss": "^1.4.0",
-    "yeticss": "^7.3.0"
+    "lodash": "^4.17.2",
+    "swiper": "^3.4.1",
+    "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
@@ -26,7 +28,6 @@
     "babel-loader": "^6.2.4",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.9.0",
-    "bower": "^1.7.9",
     "clean-webpack-plugin": "^0.1.9",
     "cross-spawn-async": "^2.0.0",
     "css-loader": "^0.23.1",
@@ -36,17 +37,17 @@
     "eslint-plugin-react": "^5.1.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
-    "gulp": "^3.9.1",
-    "gulp-webpack": "^1.5.0",
+    "glob": "^7.1.1",
     "hjs-webpack": "^8.1.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.19.0",
     "json-loader": "^0.5.4",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
-    "node-sass": "^3.7.0",
+    "node-sass": "^3.13.0",
     "postcss-loader": "^0.8.2",
     "postcss-px2rem": "^0.3.0",
+    "precss": "^1.4.0",
     "px2rem": "^0.5.0",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
@@ -58,8 +59,9 @@
     "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "pro": "NODE_ENV=production webpack",
-    "watch": "WEBPACK_ENV=dev webpack --progress --colors --watch",
+    "build": "NODE_ENV=production webpack",
+    "watch": "webpack --progress --colors --watch",
+    "dll": "webpack --progress --colors --config ./webpack.dll.config.js",
     "start": "webpack-dev-server --inline --hot",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   }

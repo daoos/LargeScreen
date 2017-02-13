@@ -60,9 +60,9 @@ export default class ImpressionTop5{
                      // console.log(params[0].value)
                      return '<div class="impressionTop5Pop-Up-Box">'+params[0].name+':  '+commafy(params[0].value)+'</div>';
                  },
-                extraCssText:'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+                // extraCssText:'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
                 // padding:10,
-                left:.1*px2rem,
+                left:.16*px2rem,
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                     type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 },
@@ -71,8 +71,8 @@ export default class ImpressionTop5{
                     fontFamily:'myFirstFont',
                  }
             },
-            color:['rgba(1, 219, 255, 0.7)','rgba(1, 219, 255, 1)'],   
-            grid:{ top:0.16*px2rem,left:0.16*px2rem},//
+            color:['rgba(1, 219, 255, 1)','rgba(1, 219, 255, 1)'],   
+            grid:{ top:0.16*px2rem,left:0.016*px2rem,right:0.016*px2rem,bottom:0.48*px2rem},//
             xAxis:{
                     type: 'category',
                     // position:'top',
@@ -154,7 +154,7 @@ export default class ImpressionTop5{
                     label: {
                         normal: {
                             show: true,
-                            position: 'top',
+                            position: [-.1*px2rem,-.2*px2rem],
                             formatter: function (params) {
                                  // console.log(params)
                                  return setNumberSeparator(params.value);
@@ -162,16 +162,18 @@ export default class ImpressionTop5{
                             textStyle:{
                                 fontSize:0.10*px2rem,
                                 fontFamily:'myFirstFont',
+
                             }
                         }
                     },
                     itemStyle:{
                         normal:{
                             barBorderRadius:[1, 1, 0, 0],
-                        },
-                        // barGap: '50%',
-                        barCategoryGap: '50%',
+                        },                    
                     },
+                    // barGap: '30%',
+                    barCategoryGap: '45%',
+
                     data:currnt,
                 }
             ]
@@ -223,7 +225,7 @@ export default class ImpressionTop5{
             var str='';
             for (var i = 0 ; i < geoTopFiveCountry.length; i++) {
                 var _p = geoTopFiveCountry[i].replace(/ /g,'%20');
-                str += '<li  style="background:url(./src/images/png/'+_p+'.png) no-repeat ;background-size:cover;"></li>';
+                str += '<li><img height="100%" src="./src/images/png/'+_p+'.png" /></li>';
             }
             $('.impressionImgArea').html(str);
         }

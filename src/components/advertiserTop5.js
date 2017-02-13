@@ -1,6 +1,7 @@
 import echarts from 'echarts';
 import temp from './advertiserTop5.html';
 import './advertiserTop5.css';
+
 import {setNumberSeparator, impressCardinalNumber,delcommafy,commafy} from '../modules/common.js';
 
 export default class AdvertiserTop5{
@@ -25,14 +26,7 @@ export default class AdvertiserTop5{
                 textStyle:{
                     fontSize:0.14*px2rem,
                     fontFamily:'myFirstFont',
-
                 }
-                // alwaysShowContent: true,
-                // formatter: function (params) {
-                //                  // console.log(params)
-                //                  // let value = Number(params.value);
-                //                  return commafy(params[0].value);
-                //             }
             },
             grid:{containLabel:true},
             color:['#54DEF1','#787E8A'],      
@@ -53,7 +47,6 @@ export default class AdvertiserTop5{
                                 fontSize:0.10*px2rem,
                                 fontFamily:'myFirstFont',
                                 }
-
                         }
                     },
                     markPoint:{
@@ -118,7 +111,6 @@ export default class AdvertiserTop5{
                  // console.log('APPTOPFIVE-----','start:'+start,'increase:'+increase,'current:'+data/ss,'s:'+s,'_s:'+increase/1800);
                  // console.log('increase*34:'+increase*34,'current*34:'+data,'_s*34:'+increase*34/1800);
                 return data;
-;
             }       
         }
 

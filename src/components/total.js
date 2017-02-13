@@ -8,28 +8,17 @@ export default class Total{
 	init(){$('.wrapper').append(temp);
 	}
 	render(_STORE){
-		
-				
-
-		let clickDailyHalfData = _STORE.clickDailyHalf;
-		
+		let clickDailyHalfData = _STORE.clickDailyHalf;		
 		let startTime =localStorage.START_TIME;
-
 		console.log(new Date(Number(startTime)));
 		// let impressCardinalNumber = 34;
-
 		let deviesCoverageData = clickDailyHalfData.device;
-
 		let deviceCoverageStart = Number(deviesCoverageData.start);
 		let inc_s = Number(deviesCoverageData.inc);
-
         let px2rem = lib.flexible.rem; // 当前页面的rem基准值
 	    
 		function setNumber(dom, number){
-
-
 			var n = String(number),len = n.length;
-
 			if(dom.find("i").length > len){
 				dom.find("i:gt(" + (len - 1) + ")").remove();
 			}
