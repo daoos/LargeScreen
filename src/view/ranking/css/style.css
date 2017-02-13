@@ -1,0 +1,205 @@
+.sel {
+    position: relative;
+    height: 26px;
+    margin: 0 0 22px;
+}
+
+.sel .sel-tog {
+    float: left;
+    cursor: pointer;
+}
+
+.sel .sel-txt, .sel .sel-btn {
+    float: left;
+    height: 26px;
+    line-height: 26px;
+    border: 2px solid #00b4d5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.sel .sel-txt {
+    min-width: 150px;
+    margin-right: 1px;
+    padding: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: #152139;
+    color: #00b4d5;
+}
+
+.sel .sel-btn {
+    position: relative;
+    width: 10px;
+    margin-right: 3px;
+    padding: 0;
+    background: #00b4d5;
+    outline: none;
+}
+
+.sel .sel-btn:before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    margin: auto;
+    border-width: 4px 3px 0;
+    border-style: solid dashed dashed;
+    border-color: #fff transparent transparent;
+}
+
+.sel img {
+    float: left;
+    width: 26px;
+    height: 26px;
+}
+
+.sel .sel-cont {
+    display: none;
+    position: absolute;
+    z-index: 9;
+    top: 32px;
+    left: 0;
+    height: 275px;
+    padding: 16px 0 16px 40px;
+    background: rgba(2, 69, 84, .9);
+    border: 2px solid #00b4d5;
+    color: #00b4d5;
+}
+
+.sel.active .sel-cont {
+    display: block;
+}
+
+.sel .sel-list {
+    height: 100%;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.sel .sel-list li {
+    float: left;
+    width: 118px;
+    height: 28px;
+    line-height: 28px;
+    margin-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.ico-ios {
+    background: url(../images/icons/ico-ios.png) no-repeat center left;
+    background-size: 35px 35px;
+}
+
+.ico-adr {
+    background: url(../images/icons/ico-adr.png) no-repeat center left;
+    background-size: 32px 36px;
+}
+
+.type-app {
+    height: 35px;
+    line-height: 35px;
+    margin-bottom: 20px;
+    padding-left: 50px;
+    overflow: hidden;
+    color: #fff;
+    font-size: 14px;
+}
+
+.dl-app-bdr {
+    border-right: 2px solid #01d8ff;
+}
+
+.dl-app {
+    float: left;
+    width: 235px;
+    margin: 0;
+    padding: 0 20px 0 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.dl-app:last-child {
+    padding-right: 70px;
+}
+
+.dl-app dt {
+    margin-bottom: 15px;
+    color: #fff;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.dl-app dt:before {
+    content: '';
+    float: left;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    margin: 0 6px 0 0;
+    border-width: 8px 6px 0;
+    border-style: solid dashed dashed;
+    border-color: #01d8ff transparent transparent;
+}
+
+.dl-app dd {
+    margin: 0 0 -15px 15px;
+}
+
+.dl-app dd a {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    color: #01d8ff;
+}
+.dl-app dd a, .dl-app dd a:visited, .dl-app dd a:hover, .dl-app dd a:active {
+    color: #01d8ff;
+    text-decoration: none;
+}
+
+.dl-app dd img {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.side-r {
+    padding-left: 70px;
+}
+
+.side-r .dl-app:last-child {
+    width: 165px;
+    padding: 0;
+}
+
+.s-ease-out .dl-app {
+    opacity: 0;
+    -webkit-transition: opacity 1s ease-out;
+    -moz-transition: opacity 1s ease-out;
+    transition: opacity 1s ease-out; 
+}
+
+.s-ease-in .dl-app {
+    opacity: 1;
+    -webkit-transition: opacity 1s ease-in;
+    -moz-transition: opacity 1s ease-in;
+    transition: opacity 1s ease-in; 
+}

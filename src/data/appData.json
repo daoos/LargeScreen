@@ -1,0 +1,24 @@
+{
+    "code": 200,
+    "message": "success",
+    "data":  {
+        "offerId": "1101",
+        "offerName": "N.O.V.A. 3: Freedom Edition",
+        "offerAdvertiser": "Gameloft",
+        "offerIcon": "//lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w65-rw",
+        "offerLocation": "EN",
+        "offerTypes": "Action",
+        "offerImages": [
+            "//lh3.ggpht.com/RhucKtmyTtX-Wwmej49LkLVtI8ycF34BRw93NZL5Q8ZZIoQur7dcsFutaxl_mH8prQ=h310-rw",
+            "//lh5.ggpht.com/1noi6xygQRVIA1hhS6ui3RHfgWyr1ZJtc9tL7YEHW89asVlE9CDqQrjobuLJIeoZwK4=h310-rw",
+            "//lh5.ggpht.com/FaUnL9-YNE27LfTdlhPyqaP5vl9JrDwzr0dMxX_U1IPfs-YdmzaN9rjbqLc78-9q=h310-rw",
+            "//lh4.ggpht.com/eDdZp9ZxytTztKT11wlHrzmnN3rS4Zdh523KmfGMAKPgR85R1ey9IIG4TgbuQf1si-Ql=h310-rw",
+            "//lh3.ggpht.com/uj6W-iQN6GiLUov6aiRxYYK7bnPrxq2en8bd81Aw5nan_f86gNfndGbUJULY6hK5MiI5=h310-rw",
+            "//lh5.ggpht.com/k9_ADaq-Gk-70n0YIj2aFmnOtfs9MlaCLoMnpUJAjy5jNTQPpUCozlJVxv5ZRO6TwwU=h310-rw"
+        ],
+        "offerStars": 4.5,
+        "offerComments": 1444305,
+        "offerConversion":  500000,
+        "offerDescription": "The most immersive and impressive sci-fi FPS franchise on smartphones is now completely free! Fight for humankind's survival!<p>Four months after Kal Wardin defeated the Volterites, President Folsom is assassinated and the beleaguered colonies surrender to the Volterite Protectorate.</p><p>Since then, Kal has been lying low, but a desperate plea from Yelena calls him back to save Earth and humankind…</p><p>• An epic storyline: Humanity finally returns to Earth after years of exile! Fight in 10 immersive levels across the galaxy, from a war-torn Earth to a frozen Volterite city.<br>• Multiple weapons and powers: Run, shoot, drive vehicles, and pilot a mech to defeat hordes of enemies.<br>• Join 12-player battles in 7 multiplayer modes (Capture the Point, Free-for-All, Capture the Flag, etc.) on 7 different maps.<br>• For the first time, multiple allies can jump inside the same vehicle and spread destruction on the battlefield.</p>"
+    }
+}

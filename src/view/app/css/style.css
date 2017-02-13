@@ -1,0 +1,228 @@
+.fig-info {
+    margin: 0 0 20px 0;
+    overflow: hidden;
+}
+
+.fig-info img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 65px;
+    height: 65px;
+    overflow: hidden;
+    margin-right: 22px;
+    border-radius: 5px;
+}
+
+.fig-info p {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0
+}
+
+.fig-info-tit {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* Slider */
+.slick-slider {
+    position: relative;
+    display: block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+    width: 265px;
+    height: 150px;
+    margin: 18px 0;
+    padding: 15px 32px;
+}
+
+.slick-list {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.slick-track {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: block;
+}
+
+.slick-track:before,
+.slick-track:after {
+    display: table;
+    content: '';
+}
+
+.slick-track:after {
+    clear: both;
+}
+
+.slick-loading .slick-track {
+    visibility: hidden;
+}
+
+.slick-slide {
+    display: none;
+    float: left;
+    height: 100%;
+    min-height: 1px;
+}
+
+.slick-slide img {
+    display: block;
+    width: 265px;
+    height: 150px;
+}
+
+.slick-slide.slick-loading img {
+    display: none;
+}
+
+.slick-initialized .slick-slide {
+    display: block;
+}
+
+.slick-loading .slick-slide {
+    visibility: hidden;
+}
+
+.slick-arrow.slick-hidden {
+    display: none;
+}
+
+.slick-prev, .slick-next {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 178px;
+    background: transparent url(../images/icons/ico-prev.png);
+    background-size: 24px 178px;
+    border: none;
+    outline: none;
+    color: transparent;
+    cursor: pointer;
+}
+
+.slick-prev:hover {
+    background: transparent url(../images/icons/ico-prev-hover.png);
+    background-size: 24px 178px;
+}
+
+.slick-next {
+    left: auto;
+    right: 0;
+    background: transparent url(../images/icons/ico-next.png);
+    background-size: 24px 178px;
+}
+
+.slick-next:hover {
+    background: transparent url(../images/icons/ico-next-hover.png);
+    background-size: 24px 178px;
+}
+
+.ico-tag {
+    margin-left: 15px;
+    padding: 0 3px;
+    border: 1px solid #0399b8;
+    border-radius: 3px;
+}
+
+.cp {
+    font-size: 0;
+}
+
+.cp-ibvm {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.score {
+    margin-right: 15px;
+    font-size: 34px;
+    line-height: 34px;
+    font-weight: bold;
+}
+
+.star {
+    height: 34px;
+    overflow: hidden;
+}
+
+.star-pl {
+    padding-left: 15px;
+    background: url(../images/icons/ico-people.png) no-repeat center left; 
+    background-size: 10px 9px;
+}
+
+.ico-star {
+    position: relative;
+    width: 70px;
+    height: 9px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    background: url(../images/icons/ico-star-bg.png) no-repeat top left;
+    background-size: 70px 9px;
+    border-bottom: 1px solid #0399b8;
+}
+
+.ico-star-cover {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 9px;
+    overflow: hidden;
+    background: url(../images/icons/ico-star.png) no-repeat top left;
+    background-size: 70px 9px;
+}
+
+.ico-dl {
+    margin: 0 5px 0 30px;
+    padding: 1px 3px;
+    border: 1px solid #0399b8;
+    border-radius: 3px;
+}
+
+.ico-dl span {
+    display: block;
+}
+
+.dl {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.txt {
+    height: 240px;
+    line-height: 15px;
+    padding: 0 45px;
+    border-left: 2px solid #0399b8;
+    overflow: hidden;
+}
