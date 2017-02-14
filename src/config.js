@@ -1,6 +1,6 @@
 let config = {
 	base:{
-		API_HOST:'3s.maosheng.com',
+		API_HOST:'3s.maosheng.com'
 		// API_HOST:'',//本地数据
 		// API_HOST:'3s.mobvista.com'
 	},
@@ -20,7 +20,7 @@ let config = {
 	},
 	worldMap:{
 		rate:300000000,
-		mun:3000000,//一个呼吸灯亮点代表的数量
+		mun:300000,//一个呼吸灯亮点代表的数量
 		dataRange:false,
 		pointColor:[//呼吸灯标注点 颜色分层    注意：要能被随机国家数 (N)整除
 		    'rgba(255, 255, 255, 0.8)'

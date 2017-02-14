@@ -4,46 +4,38 @@ import 'echarts/src/chart/bar';
 import 'echarts/src/chart/map';
 import ecConfig from 'echarts/src/config';
 import {geojson} from '../../vandor/geojson/geojson';                                                                                             
-
-import 'swiper/dist/js/swiper.jquery.js';
-import 'swiper/src/less/swiper.less';
+// import 'swiper/dist/js/swiper.jquery.js';
+// import 'swiper/src/less/swiper.less';
 import '../../vandor/flexible.js';
 import '../../vandor/jquery.MyDigitClock.js';
 import '../../vandor/animateBackground-plugin.js';
-
 import {getArrayItems,setNumberSeparator,mt_rand,date,strtotime,delcommafy,commafy,_flipObject} from '../../common/index';
 import {codeToName,nameToCode,offsetMapData,__tw,tw} from '../../common/nn';
 import {Lonlat} from '../../common/lonlat';
-
 let mapGeoData = require('echarts/src/util/mapData/params');
 let world_geo_json = require('./world_geo.json');
-
 import _flatten from 'lodash/flatten';
 import _chunk from 'lodash/chunk';
 import _fromPairs from 'lodash/fromPairs'; //
-
 import temp from './index.html';
 import './style.css';
 import CONFIG from 'config';
 import API from 'api';
 
-
-
 //init 
 $('body').html(temp);
-
 
 //base 
 const px2rem = lib.flexible.rem;
 let indexTimeTicket;
 let API_HOST = CONFIG.base.API_HOST;
 let t = '&_t=1465870766000&_t1=00f4dab846761ef48f99f763d004225c';
-let starttime = localStorage.START_TIME;
+let starttime = null;
 let m = CONFIG.total.impressCardinalNumber;
-
 var mapData =null;
-mapData = JSON.parse(localStorage.LOCAL_DATA).common.geoDailyForPopup;//国家弹框展示数据
-let geoForMapData = JSON.parse(localStorage.LOCAL_DATA).common.geoForMap;//呼吸灯坐标数据
+// mapData = JSON.parse(localStorage.LOCAL_DATA).common.geoDailyForPopup;//国家弹框展示数据
+let geoForMapData = null;
+// JSON.parse(localStorage.LOCAL_DATA).common.geoForMap;//呼吸灯坐标数据
 
 // pieChart
 let pieChartDOM = echarts.init(document.querySelector('.adv_content'));
@@ -54,7 +46,7 @@ let mapChartPopupDOM = echarts.init(document.getElementById('svg-area'));
 let markPointData = offsetMap(geojson,360,0,offsetMapData);
 let __lonlat = new Lonlat(markPointData);
 let mun = CONFIG.worldMap.mun;//单个亮点代表点击数
-let seriesItems = CONFIG.worldMap.pointColor;
+let SERIES_ITEMS = CONFIG.worldMap.pointColor;
 
 let totalData,seriesDataArray,sortTotalData,chunkDataArray;
 
@@ -66,79 +58,316 @@ let N=CONFIG.worldMap.app.N,//随机n个国家
 let option;
 let geoMapData;//地图地理数据
 
-
-
-getGeoJson(world_geo_json,(pos)=>{
-    geoMapData=pos;
-    mapGeoData.params.world2 = {getGeoJson: (callback)=>callback(offsetMap(pos,360,0,offsetMapData))}
-    render();  
-    // console.log(geoMapData.features)
-});
-
-
 $('#main-popup').on('click',function(e){
     e.stopPropagation();
     $(this).hide();
 })
 
-
 mapChartDOM.on(ecConfig.EVENT.CLICK, eConsole);
-
-
 
 //时钟区域
 const clockCon = Object.assign({},CONFIG.clock);
 clockCon.fontSize = clockCon.fontSize*px2rem;
 $("#clockid").MyDigitClock(clockCon);
-
 const dateStr = new Date().toDateString();
 const yearStr = dateStr.slice(dateStr.length-4).split('').join(' ');
 const mouthStr = dateStr.slice(4,dateStr.length-5).toUpperCase();
 $('.mouth').html(mouthStr);
 $('.year').html(yearStr);
 
-
 //滚动新闻
 $.fn.textScroll= textScroll;
-
 let newsData = require('../../data/newData.json');
 // console.log(newsData)
-
 let newspan;
-
-let timer = {};
-
-
+let timer = {};//计时器挂载
 init();
 
-
-
-
-
-
-
 //切换屏幕
-window.onload = function() {
-  var swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
-        paginationClickable: true,
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        spaceBetween: 30
+// window.onload = function() {
+//   var swiper = new Swiper('.swiper-container', {
+//         pagination: '.swiper-pagination',
+//         paginationClickable: true,
+//         nextButton: '.swiper-button-next',
+//         prevButton: '.swiper-button-prev',
+//         spaceBetween: 30
+//     });
+
+// }
+
+
+/******
+*****************/
+function init(){
+    getInitData();
+    // setInterval(everyHalfRequestData,60000);
+    // refreshRateFn(timer.e,everyHalfRequestData,60000);
+    // refreshRateFn(getInitData,20000);
+    timer.mainTimer = setInterval(()=>{getInitData()}, 20000);
+}
+
+
+function renderDom(data){
+    refreshRateFn(totalAreaRender,  CONFIG.total.rate,data,timer.totalAreaTimer);
+    refreshRateFn(pieChartRender,  CONFIG.pieChart.rate,data,timer.pieChartAreaTimer);
+    refreshRateFn(barChartRender,CONFIG.barChart.rate,data,timer.barChartAreaTimer);
+    refreshRateFn(newsAreaRender,10000);
+    barChartIconRender(data);
+    pieChartIconRender(data);
+    
+    getGeoJson(world_geo_json,(pos)=>{
+        geoMapData=pos;
+        mapGeoData.params.world2 = {getGeoJson: (callback)=>callback(offsetMap(pos,360,0,offsetMapData))}
+        option = getWorldMapOption(data.geoForMap,starttime,__lonlat);
+        mapChartDOM.setOption(option,true);
+        worldMapApplicationRender(data);
     });
-
+    refreshRateFn(worldMapApplicationRender,T,data);
 }
 
 
+//初始化数据
+function getInitData(){
+    // 清除计时器
+    clearInterval(timer.totalAreaTimer);
+    clearInterval(timer.pieChartAreaTimer);
+    clearInterval(timer.barChartAreaTimer);
+    clearInterval(timer.mainTimer);
 
-
-
-/*******************
-*******************/
-function worldMapPointRender(){  
-    option = getWorldMapOption(geoForMapData,starttime,__lonlat);
-    mapChartDOM.setOption(option,true);
+    API.getIndexData().then((data)=>{
+          //存入开始时间戳S
+          starttime = startTimeStamp();
+          // localStorage.START_TIME = starttime;
+          console.log('AJAX:-------成功'+ new Date())
+          // $('#worldMapIframe').attr('src','worldMap.html');
+          renderDom(data.common);//渲染dom
+          
+        }).catch((e)=>{
+          console.log(e,"Oops, error:------- 失败" + new Date());
+    });
 }
+
+
+//获取开始时间戳
+function startTimeStamp(){
+    let y,m,d,h,i,s,str,_i;
+    y = date('Y');
+    m = date('m');
+    d = date('d');
+    h = date('H');
+    i = date('i');
+    s = date('s');
+    if(i<10){h=h-1;_i=40;}
+    if(i<40 && i>=10){_i=10;}
+    if(i>=40){_i=40;}
+    str = +y+'-'+m+'-'+d+' '+h+':'+_i+':'+'00';
+    let timeS = strtotime(str);
+    return timeS*1000;
+}
+
+
+//每半小时取数据
+function everyHalfRequestData(){ 
+        let _s,_sc;       
+        let t = date('i');
+        let n = new Date().getTime();
+        let nn = Number(n);
+        if((t>=40&&t<41) ||(t>=10&&t<11)){
+            getInitData();
+        }else{
+            console.log('没到时间')
+        } 
+
+        // if(t!=40 && t!=10){
+        //     console.log("没到时间!")
+        //     return false;
+        // }else{
+        //     if(nn-Number(localStorage.START_CHECK)<60000) {
+        //         console.log('hi 刚取完!',localStorage.START_CHECK,n-Number(localStorage.START_CHECK));
+        //         return false;                    
+        //     }
+        //     if(!localStorage.START_CHECK || nn-Number(localStorage.START_CHECK)>60000 ){  
+        //         // console.log(localStorage.START_CHECK) 
+        //         localStorage.removeItem("START_CHECK");
+        //         localStorage.START_CHECK = n;  
+        //         getInitData();
+        //         // clearInterval(indexTimeTicket);//获取数据成功，清除计时器
+        //         console.log('嗯，成功取回数据!!!',localStorage.START_CHECK,nn,nn-Number(localStorage.START_CHECK));                 
+        //     }        
+        // }
+};
+
+
+//文本滚动
+function textScroll(speed){
+    var flag=null,tt,that=$(this),child=that.children();
+    var p_w=that.width(), w=child.width();
+    child.css({left:p_w});
+    var t=(w+p_w)/speed * 1000;
+    function play(m){
+        var tm= m==undefined ? t : m;
+        child.animate({left:-w},tm,"linear",function(){             
+            $(this).css("left",p_w);
+            play();
+        });                 
+    }
+    child.on({
+        mouseenter:function(){
+            var l=$(this).position().left;
+            $(this).stop();
+            tt=(-(-w-l)/speed)*1000;
+        },
+        mouseleave:function(){
+            play(tt);
+            tt=undefined;
+        }
+    });
+    play();
+}
+
+
+function setNumber(dom, number){
+    var n = String(number),len = n.length;
+    if(dom.find("i").length > len){
+        dom.find("i:gt(" + (len - 1) + ")").remove();
+    }
+    dom.find("b").remove();
+    for(var i=0;i<len;++i){
+        if(dom.find("i").length < len){
+            dom.append("<i></i>");
+        }               
+        var obj = dom.find("i").eq(i);
+        // let space = 0.1*px2rem;       
+        var y = -30 * parseInt(n.charAt(i), 10);
+        y = y/100*px2rem;
+        if(i < len - 1 && (len - i - 1) % 3 == 0)
+            $("<b></b>").insertAfter(obj);
+        obj.animate({ backgroundPositionY:y+"px" }, 350);
+    }
+    // console.log(dom,y,number);
+}
+
+function totalAreaRender(data){    
+    let deviceCov = Number(data.clickDailyHalf.device.start);
+    // console.log(deviceCov,data.clickDailyHalf)
+    let inc_s = Number(data.clickDailyHalf.device.inc);
+    let start = data.clickDailyHalf.start;
+    let increase = data.clickDailyHalf.increase;
+    let s = (new Date().getTime() - starttime)/1000;
+    let currentData = Math.floor((increase/1800) * s + start); 
+    let coverageCurrentData = Math.floor((inc_s * s) + deviceCov + mt_rand(-7,7)); 
+    setNumber($("#val1"),  currentData);
+    setNumber($("#val2"),  currentData*CONFIG.total.impressCardinalNumber);
+    setNumber($("#val3"),  coverageCurrentData);
+}
+
+function getPieChartOption(currentArray,relativeArray){
+    let pieLabelStyle = {//饼图样式
+        normal : {
+            label : {show : false},
+            labelLine : {show : false}
+        },
+        emphasis : {
+            label : {show : false},
+            labelLine : {show : false}
+        }        
+    }
+
+    let pie_radius = [0.20*px2rem,0.25*px2rem];
+
+    let pieOptionSeries = currentArray.map((list,index)=>{      
+        return {
+            type : 'pie',
+            center : [(index)*20+10+'%', '50%'],
+            radius : pie_radius,
+            x: (index)*20+'%', // for funnel
+            itemStyle : pieLabelStyle,
+            data : [
+                {value:list},
+                {value:relativeArray[index]}
+            ]
+        }
+    })
+    return {
+        color:['#54DEF1','#787E8A'],
+        series : pieOptionSeries
+    }   
+}
+
+function pieChartIconRender(data){
+    data.appTopFive.map((S,i)=>{
+        $('#iconarea'+(i+1)).html('<a href="/app.html?package_name='+S.package_name+'"><img style="width:40%;min-height:100%;margin:auto;" src='+S.icon+'></a>');
+    })
+}
+
+function pieChartRender(data){
+    let currentArray = [],relativeArray = [];
+    data.appTopFive.map((S,i)=>{ 
+        var s = (new Date().getTime() - starttime)/1000;
+        var current = Math.floor((S.increase*m/1800) * s + S.start*m);
+        let total = S.total*m;
+        let relative = total - current;
+        // console.log(m,s,current,S.increase,S.start,relative,total)
+        if (current>total) {
+            current = total;
+            relative=0;
+        }
+        currentArray.push(current);
+        relativeArray.push(relative);
+        $('#main'+(i+1)).html(setNumberSeparator(current))      
+    })
+    let option = getPieChartOption(currentArray,relativeArray);
+    pieChartDOM.setOption(option);    
+}
+
+
+function getGeoTop5(data,str){ 
+    let geoTopFiveData = data.geoTopFive;
+    let m = CONFIG.total.impressCardinalNumber;
+    var strlist=[]; 
+    for (var i = 0; i < geoTopFiveData.length; i++) {
+        if(str==='country') {
+            let p = (geoTopFiveData[i].country).toUpperCase();
+            let c3 = __tw[p] || false;
+            // console.log(c3,p,3,geoTopFiveData[i].country)
+            strlist.push(codeToName[c3]);                   
+        }
+        if (str==='c') {
+            let c = (geoTopFiveData[i].country).toUpperCase();
+            strlist.push(c);
+        }
+        if(str==='start') strlist.push(geoTopFiveData[i].start*m);
+        if(str ==='increase') strlist.push(geoTopFiveData[i].increase*m);
+        if(str==='total') strlist.push(geoTopFiveData[i].start + geoTopFiveData.increase*m)
+    }
+    return strlist;
+};        
+
+
+function barChartRender(data){
+    let start =  getGeoTop5(data,'start');
+    let increase = getGeoTop5(data,'increase');
+    // let starttime = localStorage.START_TIME
+    var s = (new Date().getTime() - starttime)/1000;
+    var optionData = [],_s=[];
+    for (var i = 0; i < start.length; i++) {
+        optionData.push((Math.floor((increase[i]/1800) * s + start[i])));
+        _s.push(increase[i]/1800);
+    }
+    let option = getBarChartOption(data,optionData)
+    barChartDOM.setOption(option);
+}
+
+
+function barChartIconRender(data){
+    let country = getGeoTop5(data,'country');    
+    let str='';
+    let imgurl = country.map(list=>'../../images/'+list.replace(/ /g,'%20')+'.png').map(
+            url=>str += '<li><img height="100%" src="'+url+'"/></li>'
+        )
+   $('.impressionImgArea').html(str)    
+}
+
 
 
 function newsAreaRender(){
@@ -153,25 +382,36 @@ function newsAreaRender(){
 }
 
 
+/*******************
+*******************/
+
+
+
+
 //app气泡层 渲染
-function worldMapApplicationRender(){ 
-    let data = chunkDataArray.map(e=>{
+function worldMapApplicationRender(data){ 
+    console.log(data,"000")
+    let _data = chunkDataArray.map(e=>{
         // console.log(e)
         return getArrayItems(e,N/chunkDataArray.length)
     })
 
-    data = _flatten(data).map(e=>{
+    console.log(_data,5)
+
+    _data = _flatten(_data).map(e=>{
         let aa = getArrayItems(e.geoCoord,1)[0];
         // console.log(aa)
-        let appIcon = getArrayItems(mapData[e.name.toLowerCase()].appTopFive,1)[0];
+        let appIcon = getArrayItems(data.geoDailyForPopup[e.name.toLowerCase()].appTopFive,1)[0];
         return  {
             name:e.name,
             icon:appIcon.icon,
             geoCoord:Object.values(aa)
         }
     })
-    mapChartDOM.addMarkPoint(seriesItems.length+1,{data});  
-    data = data.map(e=>{
+    console.log(_data,6)
+
+    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+1,{_data});  
+    _data = _data.map(e=>{
         return {
             name:e.name,
             icon:e.icon,
@@ -181,12 +421,12 @@ function worldMapApplicationRender(){
         }
 
     })
-    mapChartDOM.addMarkPoint(seriesItems.length+2,{data});
+    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+2,{_data});
     setTimeout(function(){
-        data.map(e=>{
+        _data.map(e=>{
             // console.log(e.name);
-            mapChartDOM.delMarkPoint(seriesItems.length+1,e.name)
-            mapChartDOM.delMarkPoint(seriesItems.length+2,e.name)
+            mapChartDOM.delMarkPoint(SERIES_ITEMS.length+1,e.name)
+            mapChartDOM.delMarkPoint(SERIES_ITEMS.length+2,e.name)
         })
     },S)
 }
@@ -194,10 +434,14 @@ function worldMapApplicationRender(){
 
 //获取地图标注option数据
 function getWorldMapOption(geoForMapData,starttime,__lonlat){
+
+    console.log(geoForMapData,1)
     let rangeData = [];
     let option = {}; 
+    console.log(2,Object.entries(geoForMapData))
     totalData = Object.entries(geoForMapData).map((e)=>{
         let currntData =  Math.floor((e[1].increase/1800 * getIncrementalTime() + e[1].start)/mun);
+        // console.log(3,currntData);
         let data =  {
             name:e[0].toUpperCase(),
             geoCoord:__lonlat.getLonLat(e[0].toUpperCase(),currntData),
@@ -207,10 +451,10 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
         return data;
     }).sort((a,b)=>b.total-a.total)
 
-    //国家地图数据
-    let a = geoMapData.features.filter(e=>{
-        return !nameToCode[e.properties.name]
-    }).map(e=>{return {e}})
+    // //国家地图数据
+    // let a = geoMapData.features.filter(e=>{
+    //     return !nameToCode[e.properties.name]
+    // }).map(e=>{return {e}})
 
     // console.log(a.length,a,geoMapData.features.length,Object.keys(nameToCode).length,Object.keys(__tw).length)
 
@@ -219,7 +463,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
     sortTotalData = totalData.filter(e=>e.geoCoord.length>0);
 
     //根据描点color分组
-    chunkDataArray = _chunk(sortTotalData,sortTotalData.length/seriesItems.length);
+    chunkDataArray = _chunk(sortTotalData,sortTotalData.length/SERIES_ITEMS.length);
 
 
     // 呼吸灯标注点数据
@@ -235,7 +479,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
         )
     )
 
-    // console.log(sortTotalData,chunkDataArray,seriesDataArray)
+    console.log(7,totalData,sortTotalData,chunkDataArray,seriesDataArray)
     
     //国家背景颜色数据   
     rangeData = _flatten(totalData).map(e=>{
@@ -274,9 +518,9 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
 
     
     // 呼吸灯分层 配置
-    option.series= seriesItems.map((_color,i)=>{
+    option.series= SERIES_ITEMS.map((_color,i)=>{
         return {
-            name: 'seriesItems'+i,
+            name: 'SERIES_ITEMS'+i,
             type: 'map',
             mapType: 'world2',
             scaleLimit:{max:4, min:0.9},
@@ -459,10 +703,6 @@ function renderPopUpHtml(data,p){
     $('.imgarea').empty().html(str);
     // console.log(3,data,p)                        
 }
-
-
-
-
     
 
 function getBarChartOption(data,currnt){ 
@@ -525,281 +765,9 @@ function getBarChartOption(data,currnt){
     return option;       
 };
 
-let indexTimer;
-
-/******
-*****************/
-function init(){
-    getInitData();
-    // setInterval(everyHalfRequestData,60000);
-    // refreshRateFn(timer.e,everyHalfRequestData,60000);
-    refreshRateFn(indexTimer,getInitData,2000000);
-}
-
-
-function render(data){
-    refreshRateFn(timer.a,totalAreaRender,  CONFIG.total.rate,data);
-    refreshRateFn(timer.b,pieChartRender,  CONFIG.pieChart.rate,data);
-    refreshRateFn(timer.c,barChartRender,CONFIG.barChart.rate,data);
-    refreshRateFn(timer.d,newsAreaRender,10000);
-    barChartIconRender(data);
-    pieChartIconRender(data);
-
-    worldMapPointRender();
-    // worldMapApplicationRender()
-    refreshRateFn(timer.d,worldMapApplicationRender,T);
-    //data, CONFIG.worldMap.rate);  
-    // impressionTop5.render(data);     
-    // 
-    console.log(timer,9) 
-}
-
-
-//初始化数据
-function getInitData(){
-    API.getIndexData().then((data)=>{
-          console.log(data,Object.keys(data.common.geoForMap))
-          let a = Object.keys(data.common.geoForMap).filter(e=>{
-                return !__tw[e.toUpperCase()];
-          })
-          // a.map(e=>{console.log(e,data.common.geoForMap[e])})
-
-          // console.log(a.length,a)
-
-          localStorage.START_TIME = startTimeStamp();
-          localStorage.LOCAL_DATA = JSON.stringify(data);
-          localStorage.PX2REM = px2rem;
-          $('#worldMapIframe').attr('src','worldMap.html');
-          render(data.common);
-          console.log('AJAX:-------成功'+ new Date(),window.setInterval)
-        }).catch((e)=>{
-          console.log("Oops, error");
-    });
-}
-
-
-//开始时间入库
-function startTimeStamp(){
-    let y,m,d,h,i,s,str,_i;
-    y = date('Y');
-    m = date('m');
-    d = date('d');
-    h = date('H');
-    i = date('i');
-    s = date('s');
-    if(i<10){h=h-1;_i=40;}
-    if(i<40 && i>=10){_i=10;}
-    if(i>=40){_i=40;}
-    str = +y+'-'+m+'-'+d+' '+h+':'+_i+':'+'00';
-    let timeS = strtotime(str);
-    return timeS*1000;
-}
-
-
-//每半小时取数据
-function everyHalfRequestData(){ 
-        let _s,_sc;       
-        let t = date('i');
-        let n = new Date().getTime();
-        let nn = Number(n);
-        if((t>=40&&t<41) ||(t>=10&&t<11)){
-            getInitData();
-        }else{
-            console.log('没到时间')
-        } 
-
-        // if(t!=40 && t!=10){
-        //     console.log("没到时间!")
-        //     return false;
-        // }else{
-        //     if(nn-Number(localStorage.START_CHECK)<60000) {
-        //         console.log('hi 刚取完!',localStorage.START_CHECK,n-Number(localStorage.START_CHECK));
-        //         return false;                    
-        //     }
-        //     if(!localStorage.START_CHECK || nn-Number(localStorage.START_CHECK)>60000 ){  
-        //         // console.log(localStorage.START_CHECK) 
-        //         localStorage.removeItem("START_CHECK");
-        //         localStorage.START_CHECK = n;  
-        //         getInitData();
-        //         // clearInterval(indexTimeTicket);//获取数据成功，清除计时器
-        //         console.log('嗯，成功取回数据!!!',localStorage.START_CHECK,nn,nn-Number(localStorage.START_CHECK));                 
-        //     }        
-        // }
-};
-
-
-//文本滚动
-function textScroll(speed){
-    var flag=null,tt,that=$(this),child=that.children();
-    var p_w=that.width(), w=child.width();
-    child.css({left:p_w});
-    var t=(w+p_w)/speed * 1000;
-    function play(m){
-        var tm= m==undefined ? t : m;
-        child.animate({left:-w},tm,"linear",function(){             
-            $(this).css("left",p_w);
-            play();
-        });                 
-    }
-    child.on({
-        mouseenter:function(){
-            var l=$(this).position().left;
-            $(this).stop();
-            tt=(-(-w-l)/speed)*1000;
-        },
-        mouseleave:function(){
-            play(tt);
-            tt=undefined;
-        }
-    });
-    play();
-}
-
-
-function setNumber(dom, number){
-    var n = String(number),len = n.length;
-    if(dom.find("i").length > len){
-        dom.find("i:gt(" + (len - 1) + ")").remove();
-    }
-    dom.find("b").remove();
-    for(var i=0;i<len;++i){
-        if(dom.find("i").length < len){
-            dom.append("<i></i>");
-        }               
-        var obj = dom.find("i").eq(i);
-        // let space = 0.1*px2rem;       
-        var y = -30 * parseInt(n.charAt(i), 10);
-        y = y/100*px2rem;
-        if(i < len - 1 && (len - i - 1) % 3 == 0)
-            $("<b></b>").insertAfter(obj);
-        obj.animate({ backgroundPositionY:y+"px" }, 350);
-    }
-    // console.log(dom,y,number);
-}
-
-function totalAreaRender(data){    
-    let deviceCov = Number(data.clickDailyHalf.device.start);
-    let inc_s = Number(data.clickDailyHalf.device.inc);
-    let start = data.clickDailyHalf.start;
-    let increase = data.clickDailyHalf.increase;
-    let s = (new Date().getTime() - starttime)/1000;
-    let currentData = Math.floor((increase/1800) * s + start); 
-    let coverageCurrentData = Math.floor((inc_s * s) + deviceCov + mt_rand(-7,7)); 
-    setNumber($("#val1"),  currentData);
-    setNumber($("#val2"),  currentData*CONFIG.total.impressCardinalNumber);
-    setNumber($("#val3"),  coverageCurrentData);
-}
-
-function getPieChartOption(currentArray,relativeArray){
-    let pieLabelStyle = {//饼图样式
-        normal : {
-            label : {show : false},
-            labelLine : {show : false}
-        },
-        emphasis : {
-            label : {show : false},
-            labelLine : {show : false}
-        }        
-    }
-
-    let pie_radius = [0.20*px2rem,0.25*px2rem];
-
-    let pieOptionSeries = currentArray.map((list,index)=>{      
-        return {
-            type : 'pie',
-            center : [(index)*20+10+'%', '50%'],
-            radius : pie_radius,
-            x: (index)*20+'%', // for funnel
-            itemStyle : pieLabelStyle,
-            data : [
-                {value:list},
-                {value:relativeArray[index]}
-            ]
-        }
-    })
-    return {
-        color:['#54DEF1','#787E8A'],
-        series : pieOptionSeries
-    }   
-}
-
-function pieChartIconRender(data){
-    data.appTopFive.map((S,i)=>{
-        $('#iconarea'+(i+1)).html('<a href="/app.html?package_name='+S.package_name+'"><img style="width:40%;min-height:100%;margin:auto;" src='+S.icon+'></a>');
-    })
-}
-
-function pieChartRender(data){
-    let currentArray = [],relativeArray = [];
-    data.appTopFive.map((S,i)=>{ 
-        var s = (new Date().getTime() - starttime)/1000;
-        var current = Math.floor((S.increase*m/1800) * s + S.start*m);
-        let total = S.total*m;
-        let relative = total - current;
-        // console.log(m,s,current,S.increase,S.start,relative,total)
-        if (current>total) {
-            current = total;
-            relative=0;
-        }
-        currentArray.push(current);
-        relativeArray.push(relative);
-        $('#main'+(i+1)).html(setNumberSeparator(current))      
-    })
-    let option = getPieChartOption(currentArray,relativeArray);
-    pieChartDOM.setOption(option);    
-}
-
-
-function getGeoTop5(data,str){ 
-    let geoTopFiveData = data.geoTopFive;
-    let m = CONFIG.total.impressCardinalNumber;
-    var strlist=[]; 
-    for (var i = 0; i < geoTopFiveData.length; i++) {
-        if(str==='country') {
-            let p = (geoTopFiveData[i].country).toUpperCase();
-            let c3 = __tw[p] || false;
-            // console.log(c3,p,3,geoTopFiveData[i].country)
-            strlist.push(codeToName[c3]);                   
-        }
-        if (str==='c') {
-            let c = (geoTopFiveData[i].country).toUpperCase();
-            strlist.push(c);
-        }
-        if(str==='start') strlist.push(geoTopFiveData[i].start*m);
-        if(str ==='increase') strlist.push(geoTopFiveData[i].increase*m);
-        if(str==='total') strlist.push(geoTopFiveData[i].start + geoTopFiveData.increase*m)
-    }
-    return strlist;
-};        
-
-
-function barChartRender(data){
-    let start =  getGeoTop5(data,'start');
-    let increase = getGeoTop5(data,'increase');
-    let starttime = localStorage.START_TIME
-    var s = (new Date().getTime() - starttime)/1000;
-    var optionData = [],_s=[];
-    for (var i = 0; i < start.length; i++) {
-        optionData.push((Math.floor((increase[i]/1800) * s + start[i])));
-        _s.push(increase[i]/1800);
-    }
-    let option = getBarChartOption(data,optionData)
-    barChartDOM.setOption(option);
-}
-
-
-function barChartIconRender(data){
-    let country = getGeoTop5(data,'country');    
-    let str='';
-    let imgurl = country.map(list=>'../../images/'+list.replace(/ /g,'%20')+'.png').map(
-            url=>str += '<li><img height="100%" src="'+url+'"/></li>'
-        )
-   $('.impressionImgArea').html(str)    
-}
-
 
 //重绘
-function refreshRateFn(timer,fn,rate,data){
+function refreshRateFn(fn,rate,data,timer){
     // timer&&clearInterval(timer);//清除计时器
     data?fn(data):fn();
     timer = setInterval(()=>{data?fn(data):fn();}, rate)
