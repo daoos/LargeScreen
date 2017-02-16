@@ -1,8 +1,9 @@
 let config = {
 	base:{
-		// API_HOST:'3s.maosheng.com'
+		// API_HOST:'3s.maosheng.com' //test
 		// API_HOST:'',//本地数据
-		API_HOST:'3s.mobvista.com'
+		API_HOST:'3s.mobvista.com',
+		rate:3600000//间隔1小时去服务端拉取一次数据
 	},
 	clock:{
 	    fontSize:0.25, 
@@ -34,10 +35,10 @@ let config = {
 	    ],
 	    company:[//公司办公点  其中美洲地区经度要偏移360度
             {name:"北京",geoCoord:[116.2330,39.5420]},
-            {name:"堪培拉",geoCoord:[149.0229,-35.2059]},
-            {name:"惠灵顿",geoCoord:[174.4657,-41.1858]},
-            {name:"华盛顿",geoCoord:[282.9967,38.5324]},
-            {name:"Guangzhou",geoCoord:[113.2759952545166,23.117055306224895],symbolSize:5}
+            // {name:"堪培拉",geoCoord:[149.0229,-35.2059]},
+            // {name:"惠灵顿",geoCoord:[174.4657,-41.1858]},
+            // {name:"华盛顿",geoCoord:[282.9967,38.5324]},
+            {name:"广州",geoCoord:[113.2759952545166,23.117055306224895],symbolSize:5}
         ],
    	    app:{//随机冒泡app
 	    	N:9,//随机选择9个国家

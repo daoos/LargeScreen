@@ -107,12 +107,7 @@ getGeoJson(world_geo_json,(pos)=>{
 });
 
 
-function worldMapAreaRender() {
-    option = getWorldMapOption(geoForMapData,starttime,__lonlat);
-    console.log("55555")
-    mapChartDOM.setOption(option,true);
-    console.log("55555",option)
-}
+
 
 
 /******
@@ -120,27 +115,23 @@ function worldMapAreaRender() {
 function init(){
     getInitData();
     newsAreaRender();
-    // setInterval(everyHalfRequestData,60000);
-    // refreshRateFn(TIMER.e,everyHalfRequestData,60000);
-    // refreshRateFn(getInitData,20000);
-    TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
     setInterval(()=>{newsAreaRender()}, CONFIG.rollNews.rate);
 }
 
 
-function renderDom(data){
-    refreshRateFn(totalAreaRender,  CONFIG.total.rate,data,TIMER.totalAreaTimer);
-    refreshRateFn(pieChartRender,  CONFIG.pieChart.rate,data,TIMER.pieChartAreaTimer);
-    refreshRateFn(barChartRender,CONFIG.barChart.rate,data,TIMER.barChartAreaTimer);
-    refreshRateFn(newsAreaRender,10000);
-    barChartIconRender(data);
-    pieChartIconRender(data);
-    worldMapAreaRender();
-    worldMapApplicationRender();
-    refreshRateFn(worldMapApplicationRender,T,TIMER.appTimer);
+// function renderDom(data){
+//     refreshRateFn(totalAreaRender,  CONFIG.total.rate,data,TIMER.totalAreaTimer);
+//     refreshRateFn(pieChartRender,  CONFIG.pieChart.rate,data,TIMER.pieChartAreaTimer);
+//     refreshRateFn(barChartRender,CONFIG.barChart.rate,data,TIMER.barChartAreaTimer);
+//     refreshRateFn(newsAreaRender,10000);
+//     barChartIconRender(data);
+//     pieChartIconRender(data);
+//     worldMapAreaRender();
+//     worldMapApplicationRender();
+//     refreshRateFn(worldMapApplicationRender,T,TIMER.appTimer);
 
-    console.log(TIMER,'Y')
-}
+//     console.log(TIMER,'Y')
+// }
 
 
 const ROOTURL = 'http://' + CONFIG.base.API_HOST;
@@ -152,7 +143,7 @@ function getInitData(){
     // 清除计时器
     for(let o in TIMER){clearInterval(TIMER[o]);}
 
-    TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
+    TIMER.mainTimer = setInterval(()=>{getInitData()}, CONFIG.base.rate);
     console.log(TIMER,'X')
     API.getIndexData().then((data)=>{
           //存入开始时间戳S
@@ -173,7 +164,7 @@ function getInitData(){
           TIMER.totalAreaTimer = setInterval(()=>{totalAreaRender(data.common)}, CONFIG.total.rate);
           TIMER.pieChartTimer = setInterval(()=>{pieChartRender(data.common)}, CONFIG.pieChart.rate);
           TIMER.barChartTimer = setInterval(()=>{barChartRender(data.common)}, CONFIG.barChart.rate);
-          // TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
+          TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
           
           console.log(TIMER,"Y")
         }).catch((e)=>{
@@ -262,7 +253,7 @@ function startTimeStamp(){
 
 
 //每半小时取数据
-function everyHalfRequestData(){ 
+function getEveryHalfData(){ 
         let _s,_sc;       
         let t = date('i');
         let n = new Date().getTime();
@@ -272,24 +263,6 @@ function everyHalfRequestData(){
         }else{
             console.log('没到时间')
         } 
-
-        // if(t!=40 && t!=10){
-        //     console.log("没到时间!")
-        //     return false;
-        // }else{
-        //     if(nn-Number(localStorage.START_CHECK)<60000) {
-        //         console.log('hi 刚取完!',localStorage.START_CHECK,n-Number(localStorage.START_CHECK));
-        //         return false;                    
-        //     }
-        //     if(!localStorage.START_CHECK || nn-Number(localStorage.START_CHECK)>60000 ){  
-        //         // console.log(localStorage.START_CHECK) 
-        //         localStorage.removeItem("START_CHECK");
-        //         localStorage.START_CHECK = n;  
-        //         getInitData();
-        //         // clearInterval(indexTimeTicket);//获取数据成功，清除计时器
-        //         console.log('嗯，成功取回数据!!!',localStorage.START_CHECK,nn,nn-Number(localStorage.START_CHECK));                 
-        //     }        
-        // }
 };
 
 
@@ -480,17 +453,25 @@ function newsAreaRender(){
 /*******************
 *******************/
 
+//地图渲染
+function worldMapAreaRender() {
+    option = getWorldMapOption(geoForMapData,starttime,__lonlat);
+    console.log("55555")
+    mapChartDOM.setOption(option,true);
+    console.log("55555",option)
+}
+
 //app气泡层 渲染
 function worldMapApplicationRender(){ 
     console.log("000")
-    let _data = chunkDataArray.map(e=>{
+    let data = chunkDataArray.map(e=>{
         // console.log(e)
         return getArrayItems(e,N/chunkDataArray.length)
     })
 
-    console.log(_data,5)
+    console.log(data,5)
 
-    _data = _flatten(_data).map(e=>{
+    data = _flatten(data).map(e=>{
         let aa = getArrayItems(e.geoCoord,1)[0];
         // console.log(aa)
         let appArray = mapData[e.name.toLowerCase()].appTop20||mapData[e.name.toLowerCase()].appTopFive
@@ -501,12 +482,12 @@ function worldMapApplicationRender(){
             geoCoord:Object.values(aa)
         }
     })
-    console.log(_data,"6666",SERIES_ITEMS.length,mapChartDOM)
+    console.log(data,"6666",SERIES_ITEMS.length,mapChartDOM)
 
-    // mapChartDOM.addMarkPoint('2',{_data});  
+    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+1,{data}); 
 
     console.log("66")
-    _data = _data.map(e=>{
+    data = data.map(e=>{
         return {
             name:e.name,
             icon:e.icon,
@@ -517,10 +498,10 @@ function worldMapApplicationRender(){
 
     })
 
-    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+2,{_data});
+    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+2,{data});
     console.log("666")
     setTimeout(function(){
-        _data.map(e=>{
+        data.map(e=>{
             console.log(e.name);
             mapChartDOM.delMarkPoint(SERIES_ITEMS.length+1,e.name)
             mapChartDOM.delMarkPoint(SERIES_ITEMS.length+2,e.name)

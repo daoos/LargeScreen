@@ -393,7 +393,7 @@ src: url('../../fonts/HELVETICABOLD.eot?#iefix') format('embedded-opentype'),
    position: relative;
    top:60px;
    left: 200px;	
-   background:url('../../images/timeline.svg') no-repeat; 
+   background:url('../../images/timeline-4.svg') no-repeat; 
    background-size:100% 100%; 
 }
 #main{
