@@ -41,6 +41,7 @@ let geoForMapData = null;
 let pieChartDOM = echarts.init(document.querySelector('.adv_content'));
 let barChartDOM = echarts.init(document.querySelector('#impressionDiv'));
 let mapChartDOM = echarts.init(document.getElementById('main'));
+console.log(mapChartDOM,pieChartDOM)
 let mapChartPopupDOM = echarts.init(document.getElementById('svg-area'));
 
 let markPointData = offsetMap(geojson,360,0,offsetMapData);
@@ -80,8 +81,8 @@ $.fn.textScroll= textScroll;
 let newsData = require('../../data/newData.json');
 // console.log(newsData)
 let newspan;
-let timer = {};//计时器挂载
-init();
+let TIMER = {};//计时器挂载
+// init();
 
 //切换屏幕
 // window.onload = function() {
@@ -94,58 +95,152 @@ init();
 //     });
 
 // }
+// 
+// 
+// 
+getGeoJson(world_geo_json,(pos)=>{
+        geoMapData=pos;
+        mapGeoData.params.world2 = {getGeoJson: (callback)=>callback(offsetMap(pos,360,0,offsetMapData))}
+        
+        // worldMapApplicationRender(data);
+        init();
+});
+
+
+function worldMapAreaRender() {
+    option = getWorldMapOption(geoForMapData,starttime,__lonlat);
+    console.log("55555")
+    mapChartDOM.setOption(option,true);
+    console.log("55555",option)
+}
 
 
 /******
 *****************/
 function init(){
     getInitData();
+    newsAreaRender();
     // setInterval(everyHalfRequestData,60000);
-    // refreshRateFn(timer.e,everyHalfRequestData,60000);
+    // refreshRateFn(TIMER.e,everyHalfRequestData,60000);
     // refreshRateFn(getInitData,20000);
-    timer.mainTimer = setInterval(()=>{getInitData()}, 20000);
+    TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
+    setInterval(()=>{newsAreaRender()}, CONFIG.rollNews.rate);
 }
 
 
 function renderDom(data){
-    refreshRateFn(totalAreaRender,  CONFIG.total.rate,data,timer.totalAreaTimer);
-    refreshRateFn(pieChartRender,  CONFIG.pieChart.rate,data,timer.pieChartAreaTimer);
-    refreshRateFn(barChartRender,CONFIG.barChart.rate,data,timer.barChartAreaTimer);
+    refreshRateFn(totalAreaRender,  CONFIG.total.rate,data,TIMER.totalAreaTimer);
+    refreshRateFn(pieChartRender,  CONFIG.pieChart.rate,data,TIMER.pieChartAreaTimer);
+    refreshRateFn(barChartRender,CONFIG.barChart.rate,data,TIMER.barChartAreaTimer);
     refreshRateFn(newsAreaRender,10000);
     barChartIconRender(data);
     pieChartIconRender(data);
-    
-    getGeoJson(world_geo_json,(pos)=>{
-        geoMapData=pos;
-        mapGeoData.params.world2 = {getGeoJson: (callback)=>callback(offsetMap(pos,360,0,offsetMapData))}
-        option = getWorldMapOption(data.geoForMap,starttime,__lonlat);
-        mapChartDOM.setOption(option,true);
-        worldMapApplicationRender(data);
-    });
-    refreshRateFn(worldMapApplicationRender,T,data);
+    worldMapAreaRender();
+    worldMapApplicationRender();
+    refreshRateFn(worldMapApplicationRender,T,TIMER.appTimer);
+
+    console.log(TIMER,'Y')
 }
 
 
-//初始化数据
-function getInitData(){
-    // 清除计时器
-    clearInterval(timer.totalAreaTimer);
-    clearInterval(timer.pieChartAreaTimer);
-    clearInterval(timer.barChartAreaTimer);
-    clearInterval(timer.mainTimer);
+const ROOTURL = 'http://' + CONFIG.base.API_HOST;
 
+
+// 初始化数据
+function getInitData(){
+    console.log("start--")
+    // 清除计时器
+    for(let o in TIMER){clearInterval(TIMER[o]);}
+
+    TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
+    console.log(TIMER,'X')
     API.getIndexData().then((data)=>{
           //存入开始时间戳S
           starttime = startTimeStamp();
           // localStorage.START_TIME = starttime;
           console.log('AJAX:-------成功'+ new Date())
           // $('#worldMapIframe').attr('src','worldMap.html');
-          renderDom(data.common);//渲染dom
+          mapData =data.common.geoDailyForPopup;//国家弹框展示数据
+          geoForMapData = data.common.geoForMap;//呼吸灯坐标数据
+          // renderDom(data.common);//渲染dom
+          totalAreaRender(data.common);
+          pieChartRender(data.common);
+          barChartRender(data.common);
+          barChartIconRender(data.common);
+          pieChartIconRender(data.common);
+          worldMapAreaRender();
+          worldMapApplicationRender(data.common);
+          TIMER.totalAreaTimer = setInterval(()=>{totalAreaRender(data.common)}, CONFIG.total.rate);
+          TIMER.pieChartTimer = setInterval(()=>{pieChartRender(data.common)}, CONFIG.pieChart.rate);
+          TIMER.barChartTimer = setInterval(()=>{barChartRender(data.common)}, CONFIG.barChart.rate);
+          // TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
           
+          console.log(TIMER,"Y")
         }).catch((e)=>{
-          console.log(e,"Oops, error:------- 失败" + new Date());
+          // console.log(e,"Oops, error:------- 失败" + new Date());
     });
 }
+
+// function getInitData(){
+//     console.log("start--")
+//     var options = {
+//         url:ROOTURL+'/screen.php?m=index&a=index'+t,
+//         // url:'../json2.json',
+//         jsonp:'jsonpReturn',
+//         data:{},
+//     }
+
+//     // 清除计时器
+//     for(let o in TIMER){clearInterval(TIMER[o]);}
+
+//     TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
+    
+//     console.log(TIMER,'X')
+
+//     $.ajax({
+//         type: "get",
+//         url:options.url,
+//         dataType: "jsonp",
+//         jsonp: options.jsonp,
+//         data: options.data,
+//         jsonpCallback: options.jsonp,
+//         success: function (data) {                
+//               starttime = startTimeStamp();
+//               // localStorage.START_TIME = starttime;
+//               console.log('AJAX:-------成功'+ new Date())
+//               // $('#worldMapIframe').attr('src','worldMap.html');
+//               mapData =data.common.geoDailyForPopup;//国家弹框展示数据
+//               geoForMapData = data.common.geoForMap;//呼吸灯坐标数据
+//               // renderDom(data.common);//渲染dom
+//               totalAreaRender(data.common);
+//               pieChartRender(data.common);
+//               barChartRender(data.common);
+//               barChartIconRender(data.common);
+//               pieChartIconRender(data.common);
+//               worldMapAreaRender();
+//               newsAreaRender();
+//               // worldMapApplicationRender(data.common);
+//               TIMER.totalAreaTimer = setInterval(()=>{totalAreaRender(data.common)}, CONFIG.total.rate);
+//               TIMER.pieChartTimer = setInterval(()=>{pieChartRender(data.common)}, CONFIG.pieChart.rate);
+//               TIMER.barChartTimer = setInterval(()=>{barChartRender(data.common)}, CONFIG.barChart.rate);
+//               // TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
+//               TIMER.newsAreaTimer = setInterval(()=>{newsAreaRender()}, CONFIG.rollNews.rate);
+//               console.log(TIMER,"Y")
+//         },
+//         //要求为Function类型的参数，请求失败时被调用的函数。该函数有3个参数，即XMLHttpRequest对象、错误信息、捕获的错误对象(可选)。ajax事件函数如下：
+//         error:function(XMLHttpRequest, textStatus, errorThrown){
+//           //通常情况下textStatus和errorThrown只有其中一个包含信息
+//           // this;   //调用本次ajax请求时传递的options参数
+//           console.log(XMLHttpRequest, textStatus, errorThrown)
+//         }
+//     });
+
+//     // qweasd
+//     // 
+// }
+
+
+
 
 
 //获取开始时间戳
@@ -385,12 +480,9 @@ function newsAreaRender(){
 /*******************
 *******************/
 
-
-
-
 //app气泡层 渲染
-function worldMapApplicationRender(data){ 
-    console.log(data,"000")
+function worldMapApplicationRender(){ 
+    console.log("000")
     let _data = chunkDataArray.map(e=>{
         // console.log(e)
         return getArrayItems(e,N/chunkDataArray.length)
@@ -401,16 +493,19 @@ function worldMapApplicationRender(data){
     _data = _flatten(_data).map(e=>{
         let aa = getArrayItems(e.geoCoord,1)[0];
         // console.log(aa)
-        let appIcon = getArrayItems(data.geoDailyForPopup[e.name.toLowerCase()].appTopFive,1)[0];
+        let appArray = mapData[e.name.toLowerCase()].appTop20||mapData[e.name.toLowerCase()].appTopFive
+        let appIcon = getArrayItems(appArray,1)[0];
         return  {
             name:e.name,
             icon:appIcon.icon,
             geoCoord:Object.values(aa)
         }
     })
-    console.log(_data,6)
+    console.log(_data,"6666",SERIES_ITEMS.length,mapChartDOM)
 
-    mapChartDOM.addMarkPoint(SERIES_ITEMS.length+1,{_data});  
+    // mapChartDOM.addMarkPoint('2',{_data});  
+
+    console.log("66")
     _data = _data.map(e=>{
         return {
             name:e.name,
@@ -421,14 +516,19 @@ function worldMapApplicationRender(data){
         }
 
     })
+
     mapChartDOM.addMarkPoint(SERIES_ITEMS.length+2,{_data});
+    console.log("666")
     setTimeout(function(){
         _data.map(e=>{
-            // console.log(e.name);
+            console.log(e.name);
             mapChartDOM.delMarkPoint(SERIES_ITEMS.length+1,e.name)
             mapChartDOM.delMarkPoint(SERIES_ITEMS.length+2,e.name)
         })
     },S)
+
+    console.log(mapChartDOM)
+
 }
 
 
@@ -479,7 +579,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
         )
     )
 
-    console.log(7,totalData,sortTotalData,chunkDataArray,seriesDataArray)
+    console.log("_7",totalData,sortTotalData,chunkDataArray,seriesDataArray)
     
     //国家背景颜色数据   
     rangeData = _flatten(totalData).map(e=>{
@@ -629,7 +729,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
     option.series.push(company);
     option.series.push(bubble); 
     option.series.push(app); 
-    // console.log(option)
+    console.log(option)
     return option
 }
 
