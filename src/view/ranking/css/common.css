@@ -1,0 +1,62 @@
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+    background: rgba(29, 82, 96, .8);
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .8);
+}
+
+body {
+    background: url(../images/bg.jpg) no-repeat top center;
+    background-size: 1237px 464px;
+    color: #0399b8;
+}
+
+.wrap {
+    width: 940px;
+    margin: 0 auto;
+    font: 12px/1.15 Helvetica, Arial, Sans-Serif;
+}
+
+section {
+    margin: 60px 0;
+}
+
+p {margin: 0 0 15px; line-height: 1.2;}
+
+.cf:before, .cf:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.col {
+    float: left;
+}
+
+.col-2 {
+    width: 16.66666667%;
+}
+
+.col-5 {
+    width: 41.66666667%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.33333333%;
+}
+
+.col-10 {
+    width: 83.33333333%;
+}

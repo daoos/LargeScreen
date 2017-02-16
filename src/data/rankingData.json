@@ -1,0 +1,145 @@
+{
+    "code": 200,
+    "message": "success",
+    "data": [{
+            "platformName": "ios",
+            "platFormRanks": [{
+                    "rankName": "Free List",
+                    "rankData": [{
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 1,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 2,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 3,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 4,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 5,
+                            "packageName": "com.myntra.android"
+                    }]
+                }, {
+                    "rankName": "Best Seller List",
+                    "rankData": [{
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 1,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 2,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 3,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 4,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 5,
+                            "packageName": "com.myntra.android"
+                        
+                    }]
+            }]
+        }, {
+            "platformName": "android",
+            "platFormRanks": [{
+                    "rankName": "Free List",
+                    "rankData": [{
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 1,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 2,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 3,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 4,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 5,
+                            "packageName": "com.myntra.android"
+                    }]
+                }, {
+                    "rankName": "Best Seller List",
+                    "rankData": [{
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 1,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 2,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 3,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 4,
+                            "packageName": "com.myntra.android"
+                        }, {
+                            "offereId": "1123",
+                            "offerName": "N.O.V.A. 3: Freedom Edition",
+                            "offerIcon": "http://lh5.ggpht.com/lcdV_0SFOzRDWove18clPbchkG7emkU_w4Wq2lz31N4pdK0lV2Yt2KHwaU5wmhE-FMc=w30-rw",
+                            "offerOrder": 5,
+                            "packageName": "com.myntra.android"
+                        
+                    }]
+            }]
+    }]
+}
