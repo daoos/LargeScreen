@@ -1,175 +1,153 @@
-var webpack = require('webpack'),
-	CleanPlugin = require('clean-webpack-plugin'),//清理
-	ExtractPlugin = require('extract-text-webpack-plugin'),// 抽取css
-	HtmlWebpackPlugin = require('html-webpack-plugin'),
-	px2rem = require('postcss-px2rem'),
+var webpack = require('webpack');
+var CleanPlugin = require('clean-webpack-plugin');//清理
+var ExtractPlugin = require('extract-text-webpack-plugin');// 抽取css
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var px2rem = require('postcss-px2rem');
+var path = require('path');
+var glob = require('glob');
 
-	path = require('path'),
-	libraryName = 'build',
-	outputFile = libraryName + '.js';
-
-var	UglifyJsPlugin = webpack.optimize.UglifyJsPlugin,
-	// env = process.env.WEBPACK_ENV,
-	production = process.env.NODE_ENV === 'production',
-	plugins = [  
-	    new ExtractPlugin('css/[name].css'),
-		//new ExtractPlugin("build.css"),    //单独使用style标签加载css并设置其路径
-        new HtmlWebpackPlugin({  //根据模板插入css/js等生成最终HTML
-             title:'Touping App',
-             // favicon:'./src/img/favicon.ico', //favicon路径
-             // filename:'../index.html',    //生成的html存放路径，相对于 path
-             // template:'../index.html',    //html模板路径
-             // inject:true,    //允许插件修改哪些内容，包括head与body
-             // hash:true,    //为静态资源生成hash值
-             // chunks:['','']  //需要引入的chunk，默认引入所有页面资源
-             minify:{    //压缩HTML文件
-                 removeComments:true,    //移除HTML中的注释
-                 collapseWhitespace:false    //删除空白符与换行符
-             }
-        }),
+var IS_PRODUCTION = process.env.NODE_ENV === 'production';
+var	plugins = [  
+	    new ExtractPlugin('css/[name].css'),        
         new webpack.ProvidePlugin({
 	      $: "jquery",
 	      jQuery: "jquery",
-	      "window.jQuery": "jquery"
-	    }),
-
+	      "window.jQuery": "jquery",
+	      "window.$":"jquery",
+	    }),		
+		new webpack.optimize.CommonsChunkPlugin({//多个入口文件，提取公共依赖
+            name: 'commons', // 
+            children: true, // 在所有的子文件中检查
+            minChunks: 2, // 提取重复两次以上的依赖
+        }),
 	    new CleanPlugin(['build/css/*.css','build/*.js']), 		
-	    new webpack.optimize.CommonsChunkPlugin({
-            name: 'main', // 将依赖移到我们的主文件中
-            children: true, // 再在所有的子文件中检查依赖文件
-            minChunks: 2, // 一个依赖重复几次会被提取出来
-        })
 	];
 
-if (production) {
-	plugins = plugins.concat([// 生产环境下需要的插件
-		// 这个插件用来寻找相同的包和文件，并把它们合并在一起
+if (IS_PRODUCTION) {
+	plugins = plugins.concat([		
+		// 相同包和文件合并
         new webpack.optimize.DedupePlugin(),
-
-        // 这个插件根据包/库的引用次数来优化它们
+        // 引用次数优化
         new webpack.optimize.OccurenceOrderPlugin(),
-
-        // 这个插件用来阻止Webpack把过小的文件打成单独的包
-        new webpack.optimize.MinChunkSizePlugin({
-            minChunkSize: 51200, // ~50kb
-        }),
-
-        // 压缩js文件
+        // 压缩js
         new webpack.optimize.UglifyJsPlugin({
             mangle: true,
             compress: {
                 warnings: false, // 禁止生成warning
+                drop_console: true
             },
         }),
-
-        // 这个插件提供了各种可用在生产环境下的变量
-        // 通过设置为false，可避免生产环境下调用到它们
-        new webpack.DefinePlugin({
-            __SERVER__: !production,
-            __DEVELOPMENT__: !production,
-            __DEVTOOLS__: !production,
-            'process.env': {
-                BABEL_ENV: JSON.stringify(process.env.NODE_ENV),
-            },
-        })
     ]);
-	outputFile = libraryName + 'min.js';
-} else{
-	outputFile = libraryName + '.js';
-};
+}
 
+var entries = getEntries('src/view/**/index.js');
+// console.log("000",entries)
+var entry = {};
 
-var config = {
-	
-	entry:__dirname + '/src/main.js',
-	debug: !production,
-	devtool: production ? false : 'eval-source-map',
-	
+Object.keys(entries).forEach(function(name) {
+    // entry，如果需要HotUpdate，在这里修改entry
+    entry[name] = entries[name];
+    // 生成html
+    var plugin = new HtmlWebpackPlugin({
+        filename: name + '.html',
+        template: './template.html',
+        inject: true,
+        chunks: ['commons',name],
+        minify: {    //压缩HTML文件
+                 removeComments:true,    //移除HTML中的注释
+                 collapseWhitespace:false    //删除空白符与换行符
+                }
+    });
+    plugins.push(plugin);
+})
+
+var config = {	
+	entry: entry,
+	debug: !IS_PRODUCTION,
+	devtool: IS_PRODUCTION ? false : 'eval-source-map',	
 	output:{
 		path: path.join(__dirname , '/build/'),
-		filename: production ? '[name]-[hash].js' : outputFile,
-		chunkFilename: '[name]-[chunkhash].js',
-		// publicPath: '/',
-		publicPath:'../build/',
-		library: libraryName,
-		libraryTarget: 'umd',
-		umdNameDefine: true
+		filename: '[name]-[id].js',
+		publicPath:'/',//指定在游览器中引用路径
 	},
-
 	devServer: {
-		port:8000,
+		port:4000,
 		host:'localhost',
         hot: true,
         inline: true,
         historyApiFallback:true,
-        // contentBase:'../build/',
-
-
-        // //其实很简单的，只要配置这个参数就可以了
-        // proxy: {
-        //   '/api/*': {//配置请求本地代理 http://localhost:5000/api/*
-        //       target: 'http://localhost:8000',
-        //       secure: false
-        //   }
-        // }
+        contentBase:__dirname+'/build',
     },
-
-
 	module:{
-		loaders:[
+		loaders:[		    
 			{
 				test: /\.js$/, 
 				loader: 'babel-loader', 
 				exclude: /node_modules/ ,
-				query: {
-			        "presets": ["es2015"]
-			    }
+				query: {"presets": ["es2015"]}
 			},
 			// {
-		 //      test: /\.less$/,
-		 //      loader: ExtractPlugin.extract('style', 'css!postcss!less-loader?sourceMap'),
-		 //    },
+			//   test: require.resolve('jquery'),  // 此loader配置项的目标是NPM中的jquery
+			//   loader: 'expose?$!expose?jQuery', // 先把jQuery对象声明成为全局变量`jQuery`，再通过管道进一步又声明成为全局变量`$`
+			// },
+			{
+		      test: /\.less$/,
+		      loader: ExtractPlugin.extract('style', 'css!postcss!less-loader?sourceMap'),
+		    },
 			{
 				test: /\.css/, 
 				loader: ExtractPlugin.extract('style','css?sourceMap!postcss?sourceMap'), 
 				exclude: /node_modules/
 			},
-			// {
-			//     test: /\.(png|gif|jpe?g|svg)$/i,
-			//     loader: 'url-loader?limit=8000&name=./images/[name].[ext]',
-			// },
 			{
 		      test: /\.(jpe?g|png|gif|svg)$/i,
-		      loader: 'file-loader?name=img/[name].[ext]'
+		      loader: 'file-loader?name=images/[name].[ext]'
 		    }, 
 			{   //文件加载器，处理文件静态资源
-                test: /\.(woff|woff2|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                test: /\.(woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'file-loader?name=fonts/[name].[ext]'
             },
-             
-		    // {
-		    //   test: /\.html$/,
-		    //   loader: 'file-loader'
-		    // },
+            {  
+                test: /\.json$/,
+                loader: 'file-loader?name=data/[name].[ext]'
+            },
+
+
 			{
 				test: /\.html$/,
 				loader: 'html?attrs=img:src img:data-src',
 				exclude: /node_modules/
 			}
 		]
-	},
-	
+	},	
 	resolve:{
-		root: path.resolve('./src'),
-		extensions: ['','.js']
-	},
-	
+		root: path.resolve('./'),
+		extensions: ['', '.js', '.json', '.scss'],
+		alias:{
+			config:'src/config',
+			api:'src/api'
+		}
+	},	
 	plugins: plugins,
-
 	postcss: [
-	require('precss'), 
-	require('autoprefixer'),
-	px2rem({remUnit:100})
+		require('precss'), 
+		require('autoprefixer'),
+		px2rem({remUnit:100})
 	]
 };
+
+/************************/
+// 获取指定路径下的入口文件
+function getEntries(globPath) {
+     var files = glob.sync(globPath);
+     // console.log("001",files)
+     var entries = {};
+     files.forEach(function(filepath) {
+         // 取倒数第二层(view下面的文件夹)做包名
+         var split = filepath.split('/');
+         var name = split[split.length - 2];
+         entries[name] = './' + filepath;
+     });
+     return entries;
+}
 module.exports = config;
