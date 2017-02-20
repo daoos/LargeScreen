@@ -143,9 +143,8 @@
     background: transparent url(../images/icons/ico-next-hover.png);
     background-size: 24px 178px;
 }
-
+#Jpub{margin-right:15px;}
 .ico-tag {
-    margin-left: 15px;
     padding: 0 3px;
     border: 1px solid #0399b8;
     border-radius: 3px;
@@ -225,4 +224,30 @@
     padding: 0 45px;
     border-left: 2px solid #0399b8;
     overflow: hidden;
+}
+
+
+.wrap {
+  width: 100%;
+  height: 468px;
+  margin: 0 auto;
+  position: relative;
+  font: 0.12rem/1.15 Helvetica, Arial, Sans-Serif;
+}
+
+.content {
+  position: absolute;
+  width: 1000px;
+  left: 50%;
+  margin-left: -500px;
+  top: 50%;
+  margin-top: -150px;
+ 
+}
+
+.cf{}
+
+.full-desc{margin-top:60px}
+.col5-main{
+
 }

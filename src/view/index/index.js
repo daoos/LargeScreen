@@ -9,7 +9,7 @@ import {geojson} from '../../vandor/geojson/geojson';
 import '../../vandor/flexible.js';
 import '../../vandor/jquery.MyDigitClock.js';
 import '../../vandor/animateBackground-plugin.js';
-import {getArrayItems,setNumberSeparator,mt_rand,date,strtotime,delcommafy,commafy,_flipObject} from '../../common/index';
+import {getArrayItems,randomNum,setNumberSeparator,mt_rand,date,strtotime,delcommafy,commafy,_flipObject} from '../../common/index';
 import {codeToName,nameToCode,offsetMapData,__tw,tw} from '../../common/nn';
 import {Lonlat} from '../../common/lonlat';
 let mapGeoData = require('echarts/src/util/mapData/params');
@@ -172,63 +172,62 @@ function getInitData(){
     });
 }
 
-// function getInitData(){
-//     console.log("start--")
-//     var options = {
-//         url:ROOTURL+'/screen.php?m=index&a=index'+t,
-//         // url:'../json2.json',
-//         jsonp:'jsonpReturn',
-//         data:{},
-//     }
-
-//     // 清除计时器
-//     for(let o in TIMER){clearInterval(TIMER[o]);}
-
-//     TIMER.mainTimer = setInterval(()=>{getInitData()}, 20000);
     
-//     console.log(TIMER,'X')
+function getInitData(){
 
-//     $.ajax({
-//         type: "get",
-//         url:options.url,
-//         dataType: "jsonp",
-//         jsonp: options.jsonp,
-//         data: options.data,
-//         jsonpCallback: options.jsonp,
-//         success: function (data) {                
-//               starttime = startTimeStamp();
-//               // localStorage.START_TIME = starttime;
-//               console.log('AJAX:-------成功'+ new Date())
-//               // $('#worldMapIframe').attr('src','worldMap.html');
-//               mapData =data.common.geoDailyForPopup;//国家弹框展示数据
-//               geoForMapData = data.common.geoForMap;//呼吸灯坐标数据
-//               // renderDom(data.common);//渲染dom
-//               totalAreaRender(data.common);
-//               pieChartRender(data.common);
-//               barChartRender(data.common);
-//               barChartIconRender(data.common);
-//               pieChartIconRender(data.common);
-//               worldMapAreaRender();
-//               newsAreaRender();
-//               // worldMapApplicationRender(data.common);
-//               TIMER.totalAreaTimer = setInterval(()=>{totalAreaRender(data.common)}, CONFIG.total.rate);
-//               TIMER.pieChartTimer = setInterval(()=>{pieChartRender(data.common)}, CONFIG.pieChart.rate);
-//               TIMER.barChartTimer = setInterval(()=>{barChartRender(data.common)}, CONFIG.barChart.rate);
-//               // TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
-//               TIMER.newsAreaTimer = setInterval(()=>{newsAreaRender()}, CONFIG.rollNews.rate);
-//               console.log(TIMER,"Y")
-//         },
-//         //要求为Function类型的参数，请求失败时被调用的函数。该函数有3个参数，即XMLHttpRequest对象、错误信息、捕获的错误对象(可选)。ajax事件函数如下：
-//         error:function(XMLHttpRequest, textStatus, errorThrown){
-//           //通常情况下textStatus和errorThrown只有其中一个包含信息
-//           // this;   //调用本次ajax请求时传递的options参数
-//           console.log(XMLHttpRequest, textStatus, errorThrown)
-//         }
-//     });
+    var options = {
+        url:ROOTURL+'/screen.php?m=index&a=index'+t,
+        // url:'../json2.json',
+        jsonp:'jsonpReturn',
+        data:{},
+    }
 
-//     // qweasd
-//     // 
-// }
+     console.log("start--")
+    // 清除计时器
+    for(let o in TIMER){clearInterval(TIMER[o]);}
+
+    TIMER.mainTimer = setInterval(()=>{getInitData()}, CONFIG.base.rate);
+    console.log(TIMER,'X')
+
+    $.ajax({
+        type: "get",
+        url:options.url,
+        dataType: "jsonp",
+        jsonp: options.jsonp,
+        data: options.data,
+        jsonpCallback: options.jsonp,
+        success: function (data) {                
+              //存入开始时间戳S
+          starttime = startTimeStamp();
+          // localStorage.START_TIME = starttime;
+          console.log('AJAX:-------成功'+ new Date())
+          // $('#worldMapIframe').attr('src','worldMap.html');
+          mapData =data.common.geoDailyForPopup;//国家弹框展示数据
+          geoForMapData = data.common.geoForMap;//呼吸灯坐标数据
+          // renderDom(data.common);//渲染dom
+          totalAreaRender(data.common);
+          pieChartRender(data.common);
+          barChartRender(data.common);
+          barChartIconRender(data.common);
+          pieChartIconRender(data.common);
+          worldMapAreaRender();
+          worldMapApplicationRender(data.common);
+          TIMER.totalAreaTimer = setInterval(()=>{totalAreaRender(data.common)}, CONFIG.total.rate);
+          TIMER.pieChartTimer = setInterval(()=>{pieChartRender(data.common)}, CONFIG.pieChart.rate);
+          TIMER.barChartTimer = setInterval(()=>{barChartRender(data.common)}, CONFIG.barChart.rate);
+          TIMER.worldMapTimer = setInterval(()=>{worldMapApplicationRender(data.common)}, T);
+          
+          console.log(TIMER,"Y")
+        },
+        //要求为Function类型的参数，请求失败时被调用的函数。该函数有3个参数，即XMLHttpRequest对象、错误信息、捕获的错误对象(可选)。ajax事件函数如下：
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+          //通常情况下textStatus和errorThrown只有其中一个包含信息
+          // this;   //调用本次ajax请求时传递的options参数
+          console.log(textStatus,errorThrown,"Oops, error:------- 失败" + new Date());        }
+    });
+
+}
+
 
 
 
@@ -476,13 +475,20 @@ function worldMapApplicationRender(){
         // console.log(aa)
         let appArray = mapData[e.name.toLowerCase()].appTop20||mapData[e.name.toLowerCase()].appTopFive
         let appIcon = getArrayItems(appArray,1)[0];
+        // let rm = randomNum(1,7)
         return  {
             name:e.name,
             icon:appIcon.icon,
             geoCoord:Object.values(aa)
         }
     })
-    console.log(data,"6666",SERIES_ITEMS.length,mapChartDOM)
+
+    console.log(data,"6666",)
+
+    data = getArrayItems(data,randomNum(1,7));
+
+    console.log(data,"---6")
+
 
     mapChartDOM.addMarkPoint(SERIES_ITEMS.length+1,{data}); 
 
@@ -675,6 +681,8 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
             data : companyDataItems
         },
     }
+
+    //x
     //气泡背景
     let bubble = {
         name: 'bubble',
@@ -682,7 +690,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
         mapType: 'world2',
         hoverable: true,
         roam: true,
-        data:[],
+        data:[{name:"New Delhi",geoCoord:[97.13,28.37],itemStyle:{normal:{label:{textStyle:{}}}}},],
         markPoint : {
             symbol:require('../../images/bubble.png'),
             symbolSize:15,
@@ -778,8 +786,9 @@ function renderPopUpHtml(data,p){
     $('.click span').empty().html(commafy(data.click));
     var str ='';
     var top5 = data.appTopFive;
+    console.log(top5,"0005")
     for (var i = top5.length - 1; i >= 0; i--) {
-        str+= '<img style="width:'+0.3*px2rem+'px;height:'+.30*px2rem+'px;margin:'+.03*px2rem+'px;" src="'+top5[i].icon+'"/>';
+        str+= '<a href="/app.html?package_name='+top5[i].package_name+'"><img style="width:'+0.3*px2rem+'px;height:'+.30*px2rem+'px;margin:'+.03*px2rem+'px;" src="'+top5[i].icon+'"/>';
     }
     $('.imgarea').empty().html(str);
     // console.log(3,data,p)                        

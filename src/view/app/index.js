@@ -10,14 +10,12 @@ import API from 'api';
 console.log(API.getAppInfoData)
 
 let appDataJson = require('../../data/appData.json');
+let appInfoData = require('../../data/appInfoData.json');
+console.log(appInfoData)
 
 $('body').html(tmpl);
 
-
-
-
 let API_HOST = CONFIG.base.API_HOST;
-
 var localPath = !API_HOST ? appDataJson : '';
 loadData();
 
@@ -25,26 +23,29 @@ loadData();
  * 加载数据
  */
 function loadData() {
-    var pkgName = getParam(window.location.href, 'package_name') || 'com.gameloft.android.ANMP.GloftNAHM';
+    var pkgName = getParam(window.location.href, 'package_name') || 'com.gameloft.android.ANMP.GloftNAHM'; 
+    let data1;
     API.getAppInfoData(pkgName).then((res)=>{
        return res.json();
     }).then((res)=>{
-        console.log(res)
-        fillCont(res.data);
-        fillSliderCont(res.data.offerImages);
+        data1 = res.data;
+        console.log(data1)
+        API.getAppInfoDataMore(pkgName).then((res)=>{
+            return res.json();
+        }).then(res=>{
+            console.log(5,res,data1)
+            fillCont(data1,res);
+            fillSliderCont(res,data1);  
+        }).catch(res=>{
+            console.log(3,res)
+            fillCont(data1,res);
+            fillSliderCont(res,data1);  
+
+        })   
+    }).catch((res)=>{
+        console.log(4,res)
     })
 
-    API.getAppInfoDataMore(pkgName).then((res)=>{
-       return res.json();
-    }).then((res)=>{
-        console.log(res)
-        fillCont(res.data);
-        fillSliderCont(res.data.offerImages);
-    })
-    // .catch((res)=>{
-    //     // console.log(res)
-    //     return res
-    // })
 
     /**
      * 根据 URL 参数名获取参数值
@@ -65,66 +66,85 @@ function loadData() {
  * 填充内容
  * @param  {Object} data 数据对象
  */
-function fillCont(data) {
+function fillCont(data1,data2) {    
     // 图标
     var logoElm = document.getElementById('Jlogo');
-    if(data.offerIcon){
-        logoElm.src = data.offerIcon
-    };
     // 名称
     var nameElm = document.getElementById('Jname');
-    nameElm && (nameElm.innerHTML = data.offerName);
-    // 发行商
-    var pubElm = document.getElementById('Jpub');
-    pubElm && (pubElm.innerHTML = data.offerAdvertiser);
+    // 发行商 = > appType
+    // var pubElm = document.getElementById('Jpub');
     // 类型
     var typeElm = document.getElementById('Jtype');
-    typeElm && (typeElm.innerHTML = data.offerTypes);
-    // 评分
+    // 评分 => 内容评级
     var scoreElm = document.getElementById('Jscore');
-    scoreElm && (scoreElm.innerHTML = data.offerStars);
     // 星级
     var starElm = document.getElementById('Jstar');
-    var pct = data.offerStars / 5 * 100;
-    !isNaN(pct) && (starElm.style.width = pct + '%');
-    // 评分人数
-    var plElm = document.getElementById('Jpl');
-    plElm && (plElm.innerHTML = format(data.offerComments) + ' total');
-    // 下载量
-    var dlElm = document.getElementById('Jdl');
-    dlElm && (dlElm.innerHTML = format(data.offerConversion));
     // 简介
     var txtElm = document.getElementById('Jtxt');
-    txtElm && (txtElm.innerHTML = data.offerDescription);
+    
+    logoElm.src = data1.offerIcon||data2.icon;
 
-    /**
-     * 格式化数字
-     * @param  {Number} num 数字
-     * @return {String}     格式化后的字符串
-     */
-    function format(num) {
-        var num = num || '';
-        var tmpStr = num + '';
-        var len = tmpStr.length;
-        var str = '';
-        for (var i = len - 1; i >= 0; i--) {
-            str = tmpStr[i] + (0 == (len - i - 1) % 3 && i != len - 1 ? ',' : '') + str;
-        }
-        return str;
+    
+    (data1.offerName||data2.appName) && (nameElm.innerHTML = data1.offerName||data2.appName);
+    (data1.offerTypes|| data2.appCategory) && (typeElm.innerHTML = data1.offerTypes|| data2.appCategory.join(','));
+    if(data1.offerStars){
+        (scoreElm.innerHTML = data1.offerStars);
+        var pct = (data1.offerStars||data2.starRating) / 5 * 100;
+        !isNaN(pct) && (starElm.style.width = pct + '%');
+    }else{
+        $('.ico-star').hide();
     }
+    (data1.offerDescription||data2.fullDesc) && (txtElm.innerHTML = data1.offerDescription||data2.fullDesc);
+    
+}
+
+/**
+* 格式化数字
+* @param  {Number} num 数字
+* @return {String}     格式化后的字符串
+*/
+function format(num) {
+var num = num || '';
+var tmpStr = num + '';
+var len = tmpStr.length;
+var str = '';
+for (var i = len - 1; i >= 0; i--) {
+    str = tmpStr[i] + (0 == (len - i - 1) % 3 && i != len - 1 ? ',' : '') + str;
+}
+return str;
 }
 
 /**
  * 创建滑块内容
- * @param  {Object} picArr 图片数组
+ * @param  {Object} res 图片数组
  */
-function fillSliderCont(picArr) {
-    if(!picArr){return}
+function fillSliderCont(res,res2) {  
+    if(!res){return}
+    // 评分人数
+    var plElm = document.getElementById('Jpl');
+    // 下载量 ＝》null
+    var dlElm = document.getElementById('Jdl');
+    if(res.ratingsCount){
+        console.log(res.ratingsCount)
+        plElm.innerHTML = format(res.ratingsCount) + ' total'
+    }else{
+        $('#ico-down').hide()
+    }
+    dlElm && res.ratingsCount && (dlElm.innerHTML = res.numDownloads);
+
+    let gpImages = (res.gpImages&&res.gpImages.length>0)?res.gpImages:[];
+    if(res.headJpg){
+        gpImages.push(res.headJpg); 
+    }
+    if(!res.gpImages){gpImages.push(res2.offerIcon)}
+    
+
     var html = '';
     var TMPL = '<div><img src="{url}" alt=""></div>';
+
     var wrapElm = document.getElementById('Jslider');
-    for (var i = 0; i < picArr.length; i++) {
-        html += TMPL.replace('{url}', picArr[i]);
+    for (var i = 0; i < gpImages.length; i++) {
+        html += TMPL.replace('{url}', gpImages[i]);
     }
     wrapElm.innerHTML = html;
 

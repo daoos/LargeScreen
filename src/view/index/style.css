@@ -463,3 +463,8 @@ src: url('../../fonts/HELVETICABOLD.eot?#iefix') format('embedded-opentype'),
     margin-bottom:8px;
     font-size:14px
 }
+
+#main-popup .right p a{ 
+    display: inline-block;
+}
+

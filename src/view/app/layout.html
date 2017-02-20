@@ -1,10 +1,16 @@
 <div class="wrap cf">
-    <section>
-        <figure class="fig-info">
-            <img alt="" id="Jlogo"><p><span class="fig-info-tit" id="Jname"></span><span id="Jpub"></span><span class="ico-tag" id="Jtype"></span></p>
-        </figure>
+    <section class="content">
+
         <div class="cf">
             <div class="col col-5">
+               <div class="col5-main">
+                <figure class="fig-info">
+                    <img alt="" id="Jlogo"><p>
+                    <span class="fig-info-tit" id="Jname"></span>
+                    <!-- <span id="Jpub"></span> -->
+                    <span class="ico-tag" id="Jtype"></span>
+                    </p>
+                </figure>
                 <div class="slider" id="Jslider"></div>
                 <div class="cp">
                     <div class="cp-ibvm score" id="Jscore"></div>
@@ -12,12 +18,13 @@
                         <p class="ico-star"><span class="ico-star-cover" id="Jstar"></span></p>
                         <p class="star-pl" id="Jpl"></p>
                     </div>
-                    <div class="cp-ibvm ico-dl"><span>Download</span> volume</div>
+                    <div class="cp-ibvm ico-dl" id="ico-down"><span>Download</span> volume</div>
                     <div class="cp-ibvm dl" id="Jdl"></div>
                 </div>
+              </div>
             </div>
-            <div class="col col-7">
-                <div class="txt" id="Jtxt"></div>
+            <div class="col col-7 full-desc" style="overflow:hidden">
+                <div class="txt" id="Jtxt" style="overflow-y:auto;margin-right:-20px;"></div>
             </div>
         </div>
     </section>

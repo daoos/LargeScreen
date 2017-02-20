@@ -37,6 +37,13 @@ export function getArrayItems(arr, num) {
     return return_array;
 }
 
+export function randomNum(Min, Max) {
+      var Range = Max - Min;
+      var Rand = Math.random();
+      var num = Min + Math.floor(Rand * Range); //舍去
+      return num;
+}
+
 
 export function _flipObject(o){//交换对象的key和vlue
     var newO ={};

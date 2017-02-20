@@ -77,6 +77,17 @@ var config = {
         inline: true,
         historyApiFallback:true,
         contentBase:__dirname+'/build',
+        // proxy: {//配置代理
+        //   '/http://dmp-api-public-1335071291.us-east-1.elb.amazonaws.com/get_dmp_app?package=*': {
+        //       target: 'http://52.6.12.10/get_dmp_app?package=com.playrix.gardenscapes',
+        //       secure: false
+        //   },
+        //   '/1': {
+        //       target: 'http://3s.mobvista.com/screen.php?m=index&a=index&_t=1465870766000&_t1=00f4dab846761ef48f99f763d004225c&callback=jsonp_1487238718803_25309',
+        //       secure: false
+        //   },
+        // }
+
     },
 	module:{
 		loaders:[		    
