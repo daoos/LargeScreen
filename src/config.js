@@ -1,3 +1,4 @@
+import {randomNum} from './common/index';
 let config = {
 	base:{
 		// API_HOST:'3s.maosheng.com' //test
@@ -43,11 +44,16 @@ let config = {
             // itemStyle:{normal:{label:{textStyle:{baseline:'top'}}}}
         	},
 			{name:"Amsterdam" ,geoCoord:[4.5328,52.2241],itemStyle:{normal:{label:{position:'right',textStyle:{baseline:'top'}}}}},
-			{name:"Copenhagen",geoCoord:[12.34,55.43],itemStyle:{normal:{label:{textStyle:{baseline:'bottom'}}}}},
+			
+			{name:"",geoCoord:[50,60],symbol:require('./images/GA_logo.svg'),symbolSize:[50,15],},
+			{name:"Copenhagen",geoCoord:[12.34,55.43],itemStyle:{normal:{label:{position:'left',textStyle:{baseline:'bottom'}}}}},
+			
 			{name:"London",geoCoord:[-0.0741,51.3028],itemStyle:{normal:{label:{position:'left',textStyle:{baseline:'top'}}}}},
 
-			{name:"Minneapolis",geoCoord:[267.85,45],itemStyle:{normal:{label:{textStyle:{}}}}},
-			{name:"Sartell",geoCoord:[264.88451,45.353901],itemStyle:{normal:{label:{position:'left',textStyle:{}}}}},
+			{name:"Minneapolis",geoCoord:[267.85,45],itemStyle:{normal:{label:{textStyle:{baseline:'top'}}}}},
+			{name:"Sartell",geoCoord:[267.85,45],itemStyle:{normal:{label:{textStyle:{baseline:'bottom'}}}}},
+			{name:"",geoCoord:[238,45],symbol:require('./images/NX_logo.svg'),symbolSize:[40,10],},
+
 			{name:"Seoul",geoCoord:[127.03,37.35],itemStyle:{normal:{label:{textStyle:{baseline:'top'}}}}},
 			{name:"San Francisco" ,geoCoord:[237.750,37.480],itemStyle:{normal:{label:{textStyle:{baseline:'top'}}}}},
 			{name:"New Delhi",geoCoord:[77.13,28.37],itemStyle:{normal:{label:{textStyle:{}}}}},
@@ -56,7 +62,7 @@ let config = {
    	    app:{//随机冒泡app
 	    	N:9,//随机选择9个国家
 	    	S:10000,//驻留10秒
-	    	T:15000//间隔15秒
+	    	T:randomNum(1,15)*1000//间隔随机1到30秒
 	    }
 	},
 	pieChart:{
