@@ -70,11 +70,16 @@ mapChartDOM.on(ecConfig.EVENT.CLICK, eConsole);
 const clockCon = Object.assign({},CONFIG.clock);
 clockCon.fontSize = clockCon.fontSize*px2rem;
 $("#clockid").MyDigitClock(clockCon);
-const dateStr = new Date().toDateString();
-const yearStr = dateStr.slice(dateStr.length-4).split('').join(' ');
-const mouthStr = dateStr.slice(4,dateStr.length-5).toUpperCase();
-$('.mouth').html(mouthStr);
-$('.year').html(yearStr);
+
+function dateAreaRander() {
+    const dateStr = new Date().toDateString();
+    const yearStr = dateStr.slice(dateStr.length-4).split('').join(' ');
+    const mouthStr = dateStr.slice(4,dateStr.length-5).toUpperCase();
+    $('.mouth').html(mouthStr);
+    $('.year').html(yearStr);
+    console.log("日期：",mouthStr,yearStr)
+}
+
 
 //滚动新闻
 $.fn.textScroll= textScroll;
@@ -115,7 +120,9 @@ getGeoJson(world_geo_json,(pos)=>{
 function init(){
     getInitData();
     newsAreaRender();
+    dateAreaRander();
     setInterval(()=>{newsAreaRender()}, CONFIG.rollNews.rate);
+    setInterval(()=>{dateAreaRander()}, 2000);
 }
 
 
@@ -438,7 +445,7 @@ function barChartIconRender(data){
 
 
 function newsAreaRender(){
-    getGeoJson('../../screen/log/news.json',(pos)=>{
+    getGeoJson('../../data/newData.json',(pos)=>{
         // console.log(pos)
        newspan = pos.news.map((i)=>{return '<span>'+i.title+'</span>'})
        // console.log(newspan)
@@ -654,7 +661,7 @@ function getWorldMapOption(geoForMapData,starttime,__lonlat){
                 label:{
                     show:true,
                     position:'right',
-                    formatter: params=>params.name,
+                    formatter: params=>params.name||'',
                     textStyle : {
                         color:'#fff',
                         fontSize : '8',
@@ -803,7 +810,7 @@ function getBarChartOption(data,currnt){
 
     option.tooltip = { //鼠标提示
         trigger: 'axis',
-        formatter: params=>codeToName[params[0].name]+': </br> '+commafy(params[0].value),
+        formatter: params=>(codeToName[params[0].name]+': </br> '+commafy(params[0].value))||'',
         axisPointer : {type:'shadow'},
         textStyle:textStyle,
     };
@@ -819,7 +826,7 @@ function getBarChartOption(data,currnt){
             interval:'0',
             margin:2,
             textStyle:textStyle,
-            formatter: params=>params
+            formatter: params=>params||''
         },
         splitLine: {show:false},
         splitArea:{show:false},
@@ -848,7 +855,7 @@ function getBarChartOption(data,currnt){
                 show: true,
                 position:'top',
                 textStyle : Object.assign({},textStyle,{}),
-                formatter: params=>setNumberSeparator(params.value,1000000),
+                formatter: params=>setNumberSeparator(params.value,1000000)||'',
             }}}
         }}),
     }]

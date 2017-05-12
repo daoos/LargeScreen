@@ -62,7 +62,7 @@
     "build": "NODE_ENV=production webpack",
     "watch": "webpack --progress --colors --watch",
     "dll": "webpack --progress --colors --config ./webpack.dll.config.js",
-    "start": "webpack-dev-server --inline --hot",
+    "start": "webpack-dev-server --inline --hot --host 0.0.0.0",
     "test": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   }
 }
