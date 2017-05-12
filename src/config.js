@@ -17,7 +17,8 @@ let config = {
 	},
 	total:{
 		impressCardinalNumber:34,
-		rate:3000
+		rate:3000,
+		riskControlNum:0.7,
 	},
 	worldMap:{
 		rate:300000000,

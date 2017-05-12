@@ -32,6 +32,8 @@ let API_HOST = CONFIG.base.API_HOST;
 let t = '&_t=1465870766000&_t1=00f4dab846761ef48f99f763d004225c';
 let starttime = null;
 let m = CONFIG.total.impressCardinalNumber;
+let riskControlNum = CONFIG.total.riskControlNum;//风控系数
+
 var mapData =null;
 // mapData = JSON.parse(localStorage.LOCAL_DATA).common.geoDailyForPopup;//国家弹框展示数据
 let geoForMapData = null;
@@ -328,7 +330,7 @@ function totalAreaRender(data){
     let start = data.clickDailyHalf.start;
     let increase = data.clickDailyHalf.increase;
     let s = (new Date().getTime() - starttime)/1000;
-    let currentData = Math.floor((increase/1800) * s + start); 
+    let currentData = Math.floor(((increase/1800) * s + start)*riskControlNum); 
     let coverageCurrentData = Math.floor((inc_s * s) + deviceCov + mt_rand(-7,7)); 
     setNumber($("#val1"),  currentData);
     setNumber($("#val2"),  currentData*CONFIG.total.impressCardinalNumber);
