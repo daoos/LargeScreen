@@ -71,7 +71,7 @@ var config = {
 		publicPath:'/',//指定在游览器中引用路径
 	},
 	devServer: {
-		port:9000,
+		port:9090,
 		host:'localhost',
         hot: true,
         inline: true,

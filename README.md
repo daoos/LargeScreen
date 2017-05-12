@@ -32,7 +32,7 @@
 ## 开发步骤
 npm install    // 安装依赖
 
-npm run start  //开启本地服务 访问localhost:4000
+npm run start  //开启本地服务 访问localhost:9090
 
   //构建打包（生产环境：自动压缩、合并，去除console.log等）
 
